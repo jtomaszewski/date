@@ -76,7 +76,7 @@ export class RecurringDate {
     });
   }
 
-  format({ type = "X of Y" }: { type: "X of Y" | "/FF" }): string {
+  format({ type = "X of Y" }: { type?: "X of Y" | "/FF" } = {}): string {
     if (type === "X of Y") {
       if (this.data.frequency === "weekly") {
         return `${moment()
