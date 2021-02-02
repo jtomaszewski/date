@@ -93,8 +93,19 @@ export class LocalDate {
     return new LocalDate(string.slice(0, valueFormat.length));
   }
 
-  static now(timeZone: string = DefaultTimeZoneRef.current): LocalDate {
+  static yesterday(timeZone: string = DefaultTimeZoneRef.current): LocalDate {
+    return new LocalDate(moment.tz(timeZone).format(valueFormat)).subtract(
+      1,
+      "day"
+    );
+  }
+
+  static today(timeZone: string = DefaultTimeZoneRef.current): LocalDate {
     return new LocalDate(moment.tz(timeZone).format(valueFormat));
+  }
+
+  static tomorrow(timeZone: string = DefaultTimeZoneRef.current): LocalDate {
+    return new LocalDate(moment.tz(timeZone).format(valueFormat)).add(1, "day");
   }
 
   setMonth(month: number): LocalDate {

@@ -59,7 +59,7 @@ export class RecurringDate {
     return this.data.frequency;
   }
 
-  getNextRecurrence(today: LocalDate = LocalDate.now()): LocalDate {
+  getNextRecurrence(today: LocalDate = LocalDate.today()): LocalDate {
     return getNextRecurringDate({
       asOf: today,
       frequency: this.frequency,
