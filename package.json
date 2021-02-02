@@ -1,11 +1,11 @@
 {
-  "name": "@ailo/typescript-starter",
+  "name": "@ailo/date",
   "version": "1.0.0",
   "description": "Ailo TypeScript starter",
   "main": "build/main/index.js",
   "typings": "build/main/index.d.ts",
   "module": "build/module/index.js",
-  "repository": "https://github.com/ailohq/typescript-starter",
+  "repository": "https://github.com/ailohq/date",
   "license": "MIT",
   "keywords": [],
   "scripts": {
@@ -57,24 +57,28 @@
   "engines": {
     "node": ">=8.9"
   },
-  "dependencies": {
-    "@ailo/ailorn": "1.0.52"
-  },
+  "dependencies": {},
   "devDependencies": {
-    "@ailo/eslint-config": "1.0.1",
+    "@ailo/eslint-config": "2.4.2",
     "@bitjson/npm-scripts-info": "^1.0.0",
-    "@types/jest": "26.0.3",
-    "codecov": "^3.7.1",
-    "cz-conventional-changelog": "^3.2.0",
-    "eslint": "7.3.1",
-    "husky": "4.2.5",
-    "jest": "26.1.0",
-    "lint-staged": "10.2.11",
+    "@types/jest": "26.0.20",
+    "@types/moment-timezone": "^0.5.30",
+    "codecov": "^3.8.1",
+    "cz-conventional-changelog": "^3.3.0",
+    "eslint": "7.19.0",
+    "husky": "4.3.8",
+    "jest": "26.6.3",
+    "lint-staged": "10.5.3",
+    "mockdate": "^3.0.2",
+    "moment-timezone": "^0.5.32",
     "npm-run-all": "^4.1.5",
-    "prettier": "^2.0.5",
-    "standard-version": "^8.0.1",
-    "trash-cli": "^3.0.0",
-    "ts-jest": "26.1.1",
-    "typescript": "^3.9.5"
+    "prettier": "^2.2.1",
+    "standard-version": "^9.1.0",
+    "trash-cli": "^4.0.0",
+    "ts-jest": "26.5.0",
+    "typescript": "^4.1.3"
+  },
+  "peerDependencies": {
+    "moment-timezone": "^0.5.32"
   }
 }
