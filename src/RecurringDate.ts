@@ -1,99 +1,74 @@
 import moment from "moment-timezone";
-import { getNextRecurringDate } from "./getNextRecurringDate";
 import { LocalDate } from "./LocalDate";
-
-export interface DailyRecurringDateInterface {
-  frequency: "daily";
-}
-
-export interface WeeklyRecurringDateInterface {
-  frequency: "weekly";
-  /**
-   * In range 1-7 (1 = Monday, 7 = Sunday).
-   */
-  anniversaryDay: number;
-}
-
-export interface FortnightlyRecurringDateInterface {
-  frequency: "fortnightly";
-  startDate: LocalDate | string;
-}
-
-export interface MonthlyRecurringDateInterface {
-  frequency: "monthly";
-  /**
-   * In range 1-28.
-   */
-  anniversaryDay: number;
-}
-
-export interface AnnuallyRecurringDateInterface {
-  frequency: "annually";
-  /**
-   * In range 1-28.
-   */
-  anniversaryDay: number;
-  /**
-   * In range 1-12.
-   */
-  anniversaryMonth: number;
-}
-
-export type RecurringDateInterface =
-  | DailyRecurringDateInterface
-  | WeeklyRecurringDateInterface
-  | FortnightlyRecurringDateInterface
-  | MonthlyRecurringDateInterface
-  | AnnuallyRecurringDateInterface;
-
-export type RecurringDateFrequency = RecurringDateInterface["frequency"];
+import {
+  RecurringDateFrequency,
+  RecurringDateInput,
+  validateRecurringDateInput,
+} from "./RecurringDateInput";
 
 export class RecurringDate {
-  private data: Readonly<RecurringDateInterface>;
+  private input: Readonly<RecurringDateInput>;
 
-  constructor(data: Readonly<RecurringDateInterface>) {
-    this.data = data;
+  constructor(input: Readonly<RecurringDateInput>) {
+    validateRecurringDateInput(input);
+    this.input = input;
   }
 
   get frequency(): RecurringDateFrequency {
-    return this.data.frequency;
+    return this.input.frequency;
   }
 
-  getNextRecurrence(today: LocalDate = LocalDate.today()): LocalDate {
-    return getNextRecurringDate({
-      asOf: today,
-      frequency: this.frequency,
-      startDate:
-        this.data.frequency === "fortnightly"
-          ? LocalDate.from(this.data.startDate)
-          : undefined,
-      anniversaryDay:
-        "anniversaryDay" in this.data ? this.data.anniversaryDay : undefined,
-      anniversaryMonth:
-        "anniversaryMonth" in this.data
-          ? this.data.anniversaryMonth
-          : undefined,
-    });
+  getNextRecurrence(asOf: LocalDate = LocalDate.today()): LocalDate {
+    if (this.input.frequency === "daily") {
+      return asOf.add(1, "day");
+    }
+
+    let result = asOf;
+    if (this.input.frequency === "fortnightly") {
+      result = LocalDate.from(this.input.startDate);
+    } else if (this.input.frequency === "weekly") {
+      result = result.setDayOfWeek(this.input.anniversaryDay);
+    } else {
+      result = result.setDayOfMonth(this.input.anniversaryDay);
+    }
+    if (this.input.frequency === "annually") {
+      result = result.setMonth(this.input.anniversaryMonth - 1);
+    }
+
+    const period: { number: number; unit: "week" | "month" | "year" } =
+      this.input.frequency === "weekly"
+        ? { number: 1, unit: "week" }
+        : this.input.frequency === "fortnightly"
+        ? { number: 2, unit: "week" }
+        : this.input.frequency === "monthly"
+        ? { number: 1, unit: "month" }
+        : { number: 1, unit: "year" };
+
+    while (result.isSameOrBefore(asOf)) {
+      result = result.add(period.number, period.unit);
+    }
+
+    return result;
   }
 
   format({ type = "X of Y" }: { type?: "X of Y" | "/FF" } = {}): string {
     if (type === "X of Y") {
-      if (this.data.frequency === "weekly") {
+      if (this.input.frequency === "weekly") {
         return `${moment()
-          .isoWeekday(this.data.anniversaryDay)
+          .isoWeekday(this.input.anniversaryDay)
           .format("dddd")} each week`;
       }
 
-      if (this.data.frequency === "monthly") {
+      if (this.input.frequency === "monthly") {
         return `${moment()
-          .date(this.data.anniversaryDay)
+          .date(this.input.anniversaryDay)
           .format("Do")} of each month`;
       }
 
-      if (this.data.frequency === "annually" && this.data.anniversaryMonth) {
+      if (this.input.frequency === "annually" && this.input.anniversaryMonth) {
         return `${moment()
-          .date(this.data.anniversaryDay)
-          .month(this.data.anniversaryMonth - 1)
+          .date(this.input.anniversaryDay)
+          .month(this.input.anniversaryMonth - 1)
           .format("Do MMMM")} each year`;
       }
     }

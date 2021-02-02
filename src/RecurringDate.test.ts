@@ -1,8 +1,8 @@
 /* eslint-disable unicorn/no-null */
-import { getNextRecurringDate } from "./getNextRecurringDate";
 import { LocalDate } from "./LocalDate";
+import { RecurringDate } from "./RecurringDate";
 
-describe("getNextRecurringDate", () => {
+describe("RecurringDate.getNextRecurringDate", () => {
   describe.each`
     anniversaryDay | anniversaryMonth | startDate       | asOf            | frequency        | expected        | description
     ${27}          | ${null}          | ${null}         | ${"2020-04-27"} | ${"monthly"}     | ${"2020-05-27"} | ${"monthly cycle"}
@@ -39,13 +39,16 @@ describe("getNextRecurringDate", () => {
     }) => {
       it(`should return ${expected}`, () => {
         expect(
-          getNextRecurringDate({
+          new RecurringDate({
             anniversaryDay,
             anniversaryMonth,
             startDate: startDate ? LocalDate.from(startDate) : null,
-            asOf: LocalDate.from(asOf),
+
             frequency,
-          }).toString()
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          } as any)
+            .getNextRecurrence(LocalDate.from(asOf))
+            .toString()
         ).toEqual(expected);
       });
     }
