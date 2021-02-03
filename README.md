@@ -6,6 +6,7 @@ Features:
 - `LocalDate` - date
 - `RecurringDate` - date that repeats daily/weekly/fortnightly/monthly/annually
 - `DefaultTimeZoneRef` - holds the default timezone that will be used (when timezone arg is not passed)
+- `DateRange` - date range that spans between two dates
 
 ## Development
 
