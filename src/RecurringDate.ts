@@ -6,6 +6,28 @@ import {
   validateRecurringDateInput,
 } from "./RecurringDateInput";
 
+export function formatRecurringDateFrequency(
+  frequency: RecurringDateFrequency,
+  _opts: {
+    type?: "/FF";
+  } = {}
+): string {
+  switch (frequency) {
+    case "daily":
+      return "/day";
+    case "weekly":
+      return "/wk";
+    case "fortnightly":
+      return "/fn";
+    case "monthly":
+      return "/mo";
+    case "annually":
+      return "/yr";
+    default:
+      throw new TypeError(`Unknown frequency: ${frequency}`);
+  }
+}
+
 export class RecurringDate {
   private input: Readonly<RecurringDateInput>;
 
@@ -74,19 +96,7 @@ export class RecurringDate {
     }
 
     if (type === "/FF") {
-      // eslint-disable-next-line default-case
-      switch (this.frequency) {
-        case "daily":
-          return "/day";
-        case "weekly":
-          return "/wk";
-        case "fortnightly":
-          return "/fn";
-        case "monthly":
-          return "/mo";
-        case "annually":
-          return "/yr";
-      }
+      return formatRecurringDateFrequency(this.frequency);
     }
 
     throw new TypeError("Not implemented");
