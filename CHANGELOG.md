@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.5.2](https://github.com/ailohq/date/compare/v1.5.1...v1.5.2) (2021-02-10)
+
+
+### Bug Fixes
+
+* Make `.format()` work with no args too; add `"DD/MM/YYYY"` format type ([b47a29b](https://github.com/ailohq/date/commit/b47a29ba0373e47c9268e1bae691f8092ead5382))
+
 ### [1.5.1](https://github.com/ailohq/date/compare/v1.5.0...v1.5.1) (2021-02-10)
 
 
