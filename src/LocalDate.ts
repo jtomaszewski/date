@@ -93,6 +93,14 @@ export class LocalDate {
     return new LocalDate(string.slice(0, valueFormat.length));
   }
 
+  static min(a: LocalDate, b: LocalDate): LocalDate {
+    return a.isBefore(b) ? a : b;
+  }
+
+  static max(a: LocalDate, b: LocalDate): LocalDate {
+    return a.isAfter(b) ? a : b;
+  }
+
   static yesterday(timeZone: string = DefaultTimeZoneRef.current): LocalDate {
     return new LocalDate(moment.tz(timeZone).format(valueFormat)).subtract(
       1,

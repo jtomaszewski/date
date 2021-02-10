@@ -1,10 +1,41 @@
 import MockDate from "mockdate";
-import { DateRange } from "./DateRange";
+import { DateRange, EndDateMustBeOnOrAfterStartDateError } from "./DateRange";
 import { LocalDate } from "./LocalDate";
 
 MockDate.set("2020-09-27T10:00:00");
 
 describe("DateRange", () => {
+  const a = new LocalDate("2000-01-01");
+  const b = new LocalDate("2000-01-31");
+
+  describe("constructor", () => {
+    it("if called with correct two args, returns date range", () => {
+      expect(new DateRange(a, b)).toMatchObject({
+        start: a,
+        end: b,
+      });
+    });
+
+    it("when constructed from invalid args, throws error", () => {
+      expect(() => new DateRange(b, a)).toThrowError(
+        EndDateMustBeOnOrAfterStartDateError
+      );
+    });
+  });
+
+  describe("from", () => {
+    it("if called with correct two args, returns date range", () => {
+      expect(DateRange.from(a, b)).toMatchObject({
+        start: a,
+        end: b,
+      });
+    });
+
+    it("if called with invalid args, returns undefined", () => {
+      expect(DateRange.from(b, a)).toEqual(undefined);
+    });
+  });
+
   it("getCurrentness returns currentness", () => {
     expect(
       new DateRange(
