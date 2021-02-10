@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.5.0](https://github.com/ailohq/date/compare/v1.4.1...v1.5.0) (2021-02-10)
+
+
+### Features
+
+* Add `DateRange.from` `DateRange.min` `DateRange.max` `RecurringDate.getOccurrencesInDateRange` ([2e604c4](https://github.com/ailohq/date/commit/2e604c44cca8f1434fd47200f56d46d8dadb19ee))
+
 ### [1.4.1](https://github.com/ailohq/date/compare/v1.4.0...v1.4.1) (2021-02-05)
 
 ## [1.4.0](https://github.com/ailohq/date/compare/v1.3.0...v1.4.0) (2021-02-05)
