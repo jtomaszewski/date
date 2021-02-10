@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.5.1](https://github.com/ailohq/date/compare/v1.5.0...v1.5.1) (2021-02-10)
+
+
+### Bug Fixes
+
+* **LocalDate:** Let `min` `max` functions accept any number of args ([6103693](https://github.com/ailohq/date/commit/61036936d0a826f5717c709ebf0fce780a7a7688))
+
 ## [1.5.0](https://github.com/ailohq/date/compare/v1.4.1...v1.5.0) (2021-02-10)
 
 
