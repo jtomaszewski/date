@@ -93,12 +93,30 @@ export class LocalDate {
     return new LocalDate(string.slice(0, valueFormat.length));
   }
 
-  static min(a: LocalDate, b: LocalDate): LocalDate {
-    return a.isBefore(b) ? a : b;
+  static min(...args: []): undefined;
+  static min(...args: [LocalDate, ...LocalDate[]]): LocalDate;
+  static min(...args: LocalDate[]): LocalDate | undefined {
+    if (args.length === 0) {
+      return undefined;
+    }
+    let min = args[0];
+    for (let i = 1; i < args.length; i++) {
+      min = min.isBefore(args[i]) ? min : args[i];
+    }
+    return min;
   }
 
-  static max(a: LocalDate, b: LocalDate): LocalDate {
-    return a.isAfter(b) ? a : b;
+  static max(...args: []): undefined;
+  static max(...args: [LocalDate, ...LocalDate[]]): LocalDate;
+  static max(...args: LocalDate[]): LocalDate | undefined {
+    if (args.length === 0) {
+      return undefined;
+    }
+    let max = args[0];
+    for (let i = 1; i < args.length; i++) {
+      max = max.isAfter(args[i]) ? max : args[i];
+    }
+    return max;
   }
 
   static yesterday(timeZone: string = DefaultTimeZoneRef.current): LocalDate {
