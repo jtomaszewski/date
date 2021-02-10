@@ -141,9 +141,9 @@ export class DateTimeWithTimeZone {
     return new DateTimeWithTimeZone(moment.tz(timeZone), timeZone);
   }
 
-  format(arg: FormatOptions | FormatOptions["type"]): string {
+  format(arg?: FormatOptions | FormatOptions["type"]): string {
     const options = typeof arg === "string" ? { type: arg } : arg;
-    const { type } = options;
+    const { type } = options ?? {};
     return this.moment.format(type);
   }
 

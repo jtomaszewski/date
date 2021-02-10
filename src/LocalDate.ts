@@ -28,6 +28,7 @@ export type LocalDateFormat =
   | "DD MMMM YYYY"
   | "DD MMM YYYY"
   | "YYYY-MM-DD"
+  | "DD/MM/YYYY"
   | "Do [of] MMMM YYYY";
 
 interface FormatOptions {
@@ -180,9 +181,9 @@ export class LocalDate {
     return this.moment.isSameOrBefore(date.moment, "day");
   }
 
-  format(arg: FormatOptions | FormatOptions["type"]): string {
+  format(arg?: FormatOptions | FormatOptions["type"]): string {
     const options = typeof arg === "string" ? { type: arg } : arg;
-    const { type } = options;
+    const { type = valueFormat } = options ?? {};
     return this.moment.format(type);
   }
 
