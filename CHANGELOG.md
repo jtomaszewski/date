@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.0.0](https://github.com/ailohq/date/compare/v1.5.2...v2.0.0) (2021-02-11)
+
+
+### ⚠ BREAKING CHANGES
+
+* **RecurringDate:** `RecurringDate.getNextRecurrence` renamed to `.getNextOccurrence`
+
+### ref
+
+* **RecurringDate:** Rename `getNextRecurrence` to `getNextOccurrence` ([eb7aee5](https://github.com/ailohq/date/commit/eb7aee58644992501baf142df8a7e80dc69ff496))
+
 ### [1.5.2](https://github.com/ailohq/date/compare/v1.5.1...v1.5.2) (2021-02-10)
 
 
