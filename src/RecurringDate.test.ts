@@ -53,7 +53,7 @@ describe("RecurringDate", () => {
               frequency,
               // eslint-disable-next-line @typescript-eslint/no-explicit-any
             } as any)
-              .getNextRecurrence(LocalDate.from(asOf))
+              .getNextOccurrence(LocalDate.from(asOf))
               .toString()
           ).toEqual(expected);
         });

@@ -41,7 +41,7 @@ export class RecurringDate {
     return this.input.frequency;
   }
 
-  getNextRecurrence(asOf: LocalDate = LocalDate.today()): LocalDate {
+  getNextOccurrence(asOf: LocalDate = LocalDate.today()): LocalDate {
     if (this.input.frequency === "daily") {
       return asOf.add(1, "day");
     }
@@ -97,7 +97,7 @@ export class RecurringDate {
       if (dateRange.end && date.isSameOrAfter(dateRange.end)) {
         break;
       }
-      date = this.getNextRecurrence(date);
+      date = this.getNextOccurrence(date);
       result.push(date);
     }
     return result;
