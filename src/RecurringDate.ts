@@ -78,12 +78,14 @@ export class RecurringDate {
    * Gets next occurrence from `asOf`,
    * that is no later than on `end` (if `end` is given).
    */
-  getNextOccurrenceNoLaterThan(
-    end: LocalDate | undefined,
+  getNextOccurrenceInDateRange(
+    dateRange: DateRange,
     asOf: LocalDate = LocalDate.today()
   ): LocalDate | undefined {
-    const occurrence = this.getNextOccurrence(asOf);
-    if (end && occurrence.isAfter(end)) {
+    const occurrence = this.getNextOccurrence(
+      LocalDate.max(dateRange.start, asOf)
+    );
+    if (dateRange.end && occurrence.isAfter(dateRange.end)) {
       return undefined;
     }
     return occurrence;
