@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.1.0](https://github.com/ailohq/date/compare/v2.0.0...v2.1.0) (2021-02-15)
+
+
+### Features
+
+* **DateRange): Add `.format(:** string` method ([d61d6ff](https://github.com/ailohq/date/commit/d61d6ffdf5320083466f8186413200581e2724de))
+* **RecurringDate:** Add `getNextOccurrenceNoLaterThan` method ([0a1d3ce](https://github.com/ailohq/date/commit/0a1d3ced0caed270b96ada63eb76efece5776775))
+
 ## [2.0.0](https://github.com/ailohq/date/compare/v1.5.2...v2.0.0) (2021-02-11)
 
 
