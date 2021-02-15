@@ -1,7 +1,6 @@
 import moment from "moment-timezone";
 import { DateTimeWithTimeZone } from "./DateTimeWithTimeZone";
 import { DefaultTimeZoneRef } from "./DefaultTimeZoneRef";
-import { convertNumberToTwoDigits } from "./utils";
 
 export type LocalDateUnit =
   | "year"
@@ -36,6 +35,10 @@ interface FormatOptions {
 }
 
 export const localDateValueFormat = "YYYY-MM-DD" as const;
+
+function convertNumberToTwoDigits(number: number): string {
+  return number < 10 ? `0${number}` : `${number}`;
+}
 
 export class LocalDate {
   constructor(readonly value: string) {
