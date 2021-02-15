@@ -1,6 +1,6 @@
 {
   "name": "@ailo/date",
-  "version": "2.1.5",
+  "version": "2.1.6",
   "description": "Ailo TypeScript starter",
   "main": "build/main/index.js",
   "typings": "build/main/index.d.ts",
