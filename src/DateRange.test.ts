@@ -8,7 +8,7 @@ describe("DateRange", () => {
   const a = new LocalDate("2000-01-01");
   const b = new LocalDate("2000-01-31");
 
-  describe("constructor", () => {
+  describe(".constructor", () => {
     it("if called with correct two args, returns date range", () => {
       expect(new DateRange(a, b)).toMatchObject({
         start: a,
@@ -23,7 +23,7 @@ describe("DateRange", () => {
     });
   });
 
-  describe("from", () => {
+  describe(".from", () => {
     it("if called with correct two args, returns date range", () => {
       expect(DateRange.from(a, b)).toMatchObject({
         start: a,
@@ -36,7 +36,7 @@ describe("DateRange", () => {
     });
   });
 
-  it("getCurrentness returns currentness", () => {
+  it(".getCurrentness returns currentness", () => {
     expect(
       new DateRange(
         LocalDate.yesterday(),
@@ -63,7 +63,7 @@ describe("DateRange", () => {
     ).toEqual("future");
   });
 
-  it("isBefore returns true if date range is in the past", () => {
+  it(".isBefore returns true if date range is in the past", () => {
     expect(
       new DateRange(LocalDate.yesterday(), LocalDate.yesterday()).isBefore()
     ).toEqual(true);
@@ -84,7 +84,7 @@ describe("DateRange", () => {
     ).toEqual(false);
   });
 
-  it("contains returns true if date range is currently ongoing", () => {
+  it(".contains returns true if date range is currently ongoing", () => {
     expect(
       new DateRange(LocalDate.yesterday(), LocalDate.yesterday()).contains()
     ).toEqual(false);
@@ -105,7 +105,7 @@ describe("DateRange", () => {
     ).toEqual(false);
   });
 
-  it("isAfter returns true if date range is in the past", () => {
+  it(".isAfter returns true if date range is in the past", () => {
     expect(
       new DateRange(LocalDate.yesterday(), LocalDate.yesterday()).isAfter()
     ).toEqual(false);
@@ -124,5 +124,15 @@ describe("DateRange", () => {
     expect(
       new DateRange(LocalDate.tomorrow(), LocalDate.tomorrow()).isAfter()
     ).toEqual(true);
+  });
+
+  describe(".format", () => {
+    it("if end date is specified, returns formatted date range", () => {
+      expect(new DateRange(a, b).format()).toEqual("2000-01-01 - 2000-01-31");
+    });
+
+    it('if end date isn\'t specified, returns formatted "From: START_DATE"', () => {
+      expect(new DateRange(a).format()).toEqual("From 2000-01-01");
+    });
   });
 });

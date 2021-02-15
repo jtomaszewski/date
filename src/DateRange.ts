@@ -1,4 +1,4 @@
-import { LocalDate } from "./LocalDate";
+import { LocalDate, LocalDateFormat } from "./LocalDate";
 
 export type DateRangeCurrentness = "past" | "current" | "future";
 
@@ -47,5 +47,15 @@ export class DateRange {
 
   isAfter(date: LocalDate = LocalDate.today()): boolean {
     return this.getCurrentness(date) === "future";
+  }
+
+  format({ dateFormat }: { dateFormat?: LocalDateFormat } = {}): string {
+    if (this.end) {
+      return `${this.start.format(dateFormat)} - ${this.end.format(
+        dateFormat
+      )}`;
+    }
+
+    return `From ${this.start.format(dateFormat)}`;
   }
 }
