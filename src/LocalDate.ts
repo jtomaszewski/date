@@ -35,7 +35,7 @@ interface FormatOptions {
   type: LocalDateFormat;
 }
 
-const valueFormat = "YYYY-MM-DD" as const;
+export const localDateValueFormat = "YYYY-MM-DD" as const;
 
 export class LocalDate {
   constructor(readonly value: string) {
@@ -50,7 +50,7 @@ export class LocalDate {
     if (!this._moment) {
       this._moment = moment.tz(
         this.value,
-        valueFormat,
+        localDateValueFormat,
         DefaultTimeZoneRef.current
       );
     }
@@ -80,7 +80,7 @@ export class LocalDate {
   }
 
   static fromMoment(m: moment.Moment): LocalDate {
-    return new LocalDate(m.format(valueFormat));
+    return new LocalDate(m.format(localDateValueFormat));
   }
 
   static fromDate(date: Date): LocalDate {
@@ -91,7 +91,7 @@ export class LocalDate {
   }
 
   static fromString(string: string): LocalDate {
-    return new LocalDate(string.slice(0, valueFormat.length));
+    return new LocalDate(string.slice(0, localDateValueFormat.length));
   }
 
   static min(...args: []): undefined;
@@ -121,43 +121,49 @@ export class LocalDate {
   }
 
   static yesterday(timeZone: string = DefaultTimeZoneRef.current): LocalDate {
-    return new LocalDate(moment.tz(timeZone).format(valueFormat)).subtract(
+    return new LocalDate(
+      moment.tz(timeZone).format(localDateValueFormat)
+    ).subtract(1, "day");
+  }
+
+  static today(timeZone: string = DefaultTimeZoneRef.current): LocalDate {
+    return new LocalDate(moment.tz(timeZone).format(localDateValueFormat));
+  }
+
+  static tomorrow(timeZone: string = DefaultTimeZoneRef.current): LocalDate {
+    return new LocalDate(moment.tz(timeZone).format(localDateValueFormat)).add(
       1,
       "day"
     );
   }
 
-  static today(timeZone: string = DefaultTimeZoneRef.current): LocalDate {
-    return new LocalDate(moment.tz(timeZone).format(valueFormat));
-  }
-
-  static tomorrow(timeZone: string = DefaultTimeZoneRef.current): LocalDate {
-    return new LocalDate(moment.tz(timeZone).format(valueFormat)).add(1, "day");
-  }
-
   setMonth(month: number): LocalDate {
-    return new LocalDate(this.moment.clone().month(month).format(valueFormat));
+    return new LocalDate(
+      this.moment.clone().month(month).format(localDateValueFormat)
+    );
   }
 
   setDayOfMonth(date: number): LocalDate {
-    return new LocalDate(this.moment.clone().date(date).format(valueFormat));
+    return new LocalDate(
+      this.moment.clone().date(date).format(localDateValueFormat)
+    );
   }
 
   setDayOfWeek(isoWeekday: number): LocalDate {
     return new LocalDate(
-      this.moment.clone().isoWeekday(isoWeekday).format(valueFormat)
+      this.moment.clone().isoWeekday(isoWeekday).format(localDateValueFormat)
     );
   }
 
   add(amount: number, unit: LocalDateUnit): LocalDate {
     return new LocalDate(
-      this.moment.clone().add(amount, unit).format(valueFormat)
+      this.moment.clone().add(amount, unit).format(localDateValueFormat)
     );
   }
 
   subtract(amount: number, unit: LocalDateUnit): LocalDate {
     return new LocalDate(
-      this.moment.clone().subtract(amount, unit).format(valueFormat)
+      this.moment.clone().subtract(amount, unit).format(localDateValueFormat)
     );
   }
 
@@ -183,12 +189,12 @@ export class LocalDate {
 
   format(arg?: FormatOptions | FormatOptions["type"]): string {
     const options = typeof arg === "string" ? { type: arg } : arg;
-    const { type = valueFormat } = options ?? {};
+    const { type = localDateValueFormat } = options ?? {};
     return this.moment.format(type);
   }
 
   toString(): string {
-    return this.format(valueFormat);
+    return this.format(localDateValueFormat);
   }
 
   toDate(): Date {

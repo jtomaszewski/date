@@ -1,6 +1,6 @@
 import moment from "moment-timezone";
 import { DefaultTimeZoneRef } from "./DefaultTimeZoneRef";
-import { LocalDate, LocalDateFormat } from "./LocalDate";
+import { LocalDate, LocalDateFormat, localDateValueFormat } from "./LocalDate";
 
 interface FormatOptions {
   type: LocalDateFormat | "DD MMM YYYY h:mm A";
@@ -218,11 +218,7 @@ export class DateTimeWithTimeZone {
   }
 
   toLocalDateString(): string {
-    return this.format("YYYY-MM-DD");
-  }
-
-  static isMaxDate(timestamp: string): boolean {
-    return !!timestamp && timestamp.startsWith("+999999999");
+    return this.format(localDateValueFormat);
   }
 
   /**
