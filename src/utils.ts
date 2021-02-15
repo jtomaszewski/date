@@ -23,7 +23,7 @@ export function convertDateStringToLocalDate(dateString: string): Date {
  *
  * @deprecated Use `LocalDate.from(date).toString()` instead.
  */
-export function convertLocalDatetoLocalDateString(date: Date): string {
+export function convertLocalDateToLocalDateString(date: Date): string {
   return `${date.getFullYear()}-${convertNumberToTwoDigits(
     date.getMonth() + 1
   )}-${convertNumberToTwoDigits(date.getDate())}`;
