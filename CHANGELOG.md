@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.1.5](https://github.com/ailohq/date/compare/v2.1.4...v2.1.5) (2021-02-15)
+
+
+### Bug Fixes
+
+* Improve letter case naming of `convertLocalDateToLocalDateString` function ([580fd02](https://github.com/ailohq/date/commit/580fd02228990d7bad60274917f2bed31d4b0c6a))
+
 ### [2.1.4](https://github.com/ailohq/date/compare/v2.1.3...v2.1.4) (2021-02-15)
 
 ### [2.1.3](https://github.com/ailohq/date/compare/v2.1.2...v2.1.3) (2021-02-15)
