@@ -122,23 +122,31 @@ export class RecurringDate {
 
   format({ type = "X of Y" }: { type?: "X of Y" | "/FF" } = {}): string {
     if (type === "X of Y") {
-      if (this.input.frequency === "weekly") {
-        return `${moment()
-          .isoWeekday(this.input.anniversaryDay)
-          .format("dddd")} each week`;
-      }
+      // eslint-disable-next-line default-case
+      switch (this.input.frequency) {
+        case "daily":
+          return "Every day";
 
-      if (this.input.frequency === "monthly") {
-        return `${moment()
-          .date(this.input.anniversaryDay)
-          .format("Do")} of each month`;
-      }
+        case "fortnightly":
+          return `Fortnightly starting with ${LocalDate.from(
+            this.input.startDate
+          ).format("D MMM YYYY")}`;
 
-      if (this.input.frequency === "annually" && this.input.anniversaryMonth) {
-        return `${moment()
-          .date(this.input.anniversaryDay)
-          .month(this.input.anniversaryMonth - 1)
-          .format("Do MMMM")} each year`;
+        case "weekly":
+          return `${moment()
+            .isoWeekday(this.input.anniversaryDay)
+            .format("dddd")} each week`;
+
+        case "monthly":
+          return `${moment()
+            .date(this.input.anniversaryDay)
+            .format("Do")} of each month`;
+
+        case "annually":
+          return `${moment()
+            .date(this.input.anniversaryDay)
+            .month(this.input.anniversaryMonth - 1)
+            .format("Do MMMM")} each year`;
       }
     }
 
@@ -146,6 +154,8 @@ export class RecurringDate {
       return formatRecurringDateFrequency(this.frequency);
     }
 
-    throw new TypeError("Not implemented");
+    throw new TypeError(
+      ".format() not implemented for this recurring date input and format type"
+    );
   }
 }
