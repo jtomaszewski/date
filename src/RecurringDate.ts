@@ -83,7 +83,7 @@ export class RecurringDate {
     asOf: LocalDate = LocalDate.today()
   ): LocalDate | undefined {
     const occurrence = this.getNextOccurrence(
-      LocalDate.max(dateRange.start, asOf)
+      LocalDate.max(dateRange.start.subtract(1, "day"), asOf)
     );
     if (dateRange.end && occurrence.isAfter(dateRange.end)) {
       return undefined;
