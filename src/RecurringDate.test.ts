@@ -8,7 +8,7 @@ const dailyRecurringDate = new RecurringDate({
 });
 
 describe("RecurringDate", () => {
-  describe("getNextRecurringDate", () => {
+  describe("getNextOccurrence", () => {
     describe.each`
       anniversaryDay | anniversaryMonth | startDate       | asOf            | frequency        | expected        | description
       ${27}          | ${null}          | ${null}         | ${"2020-04-27"} | ${"monthly"}     | ${"2020-05-27"} | ${"monthly cycle"}
@@ -59,6 +59,32 @@ describe("RecurringDate", () => {
         });
       }
     );
+  });
+
+  describe("getNextOccurrenceNoLaterThan", () => {
+    it("if next occurrence fits in the end date period, returns it", () => {
+      const value1 = dailyRecurringDate.getNextOccurrenceNoLaterThan(
+        LocalDate.tomorrow()
+      );
+      expect(value1!.toString()).toEqual(LocalDate.tomorrow().toString());
+
+      const value2 = dailyRecurringDate.getNextOccurrenceNoLaterThan(
+        LocalDate.tomorrow().add(1, "day")
+      );
+      expect(value2!.toString()).toEqual(LocalDate.tomorrow().toString());
+    });
+
+    it("if next occurrence doesnt fit in the end date period, returns undefined", () => {
+      const value1 = dailyRecurringDate.getNextOccurrenceNoLaterThan(
+        LocalDate.today()
+      );
+      expect(value1).toEqual(undefined);
+    });
+
+    it("if end date is not given, returns next occurrence", () => {
+      const value1 = dailyRecurringDate.getNextOccurrenceNoLaterThan(undefined);
+      expect(value1!.toString()).toEqual(LocalDate.tomorrow().toString());
+    });
   });
 
   describe("getOccurrencesInDateRange", () => {
