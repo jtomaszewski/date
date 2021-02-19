@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.2.0](https://github.com/ailohq/date/compare/v2.1.6...v2.2.0) (2021-02-19)
+
+
+### Features
+
+* Add `LocalDate.parse` static method ([1609268](https://github.com/ailohq/date/commit/160926819dd2e5faf2836b176bd0f402e30cc328))
+
 ### [2.1.6](https://github.com/ailohq/date/compare/v2.1.5...v2.1.6) (2021-02-15)
 
 ### [2.1.5](https://github.com/ailohq/date/compare/v2.1.4...v2.1.5) (2021-02-15)
