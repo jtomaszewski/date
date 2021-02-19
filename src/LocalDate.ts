@@ -97,6 +97,32 @@ export class LocalDate {
     return new LocalDate(string.slice(0, localDateValueFormat.length));
   }
 
+  /**
+   * Will try to parse the string to a LocalDate.
+   * If string is empty or of invalid format, will return undefined.
+   */
+  static parse(string: string | null | undefined): LocalDate | undefined {
+    if (!string) {
+      return undefined;
+    }
+    try {
+      const timestamp = Date.parse(string);
+      const date = new Date(timestamp);
+      // Chrome sets 2001 by default if no year is given
+      // ( https://stackoverflow.com/questions/40504116/default-year-in-date-if-datestring-does-not-have-year-part )
+      const defaultYear = 2001;
+      if (
+        !string.includes(String(defaultYear)) &&
+        date.getFullYear() === defaultYear
+      ) {
+        date.setFullYear(new Date().getFullYear());
+      }
+      return this.fromDate(date);
+    } catch {
+      return undefined;
+    }
+  }
+
   static min(...args: []): undefined;
   static min(...args: [LocalDate, ...LocalDate[]]): LocalDate;
   static min(...args: LocalDate[]): LocalDate | undefined {
