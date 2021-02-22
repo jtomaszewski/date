@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/prefer-regexp-exec */
 import moment from "moment-timezone";
 import { DateTimeWithTimeZone } from "./DateTimeWithTimeZone";
 import { DefaultTimeZoneRef } from "./DefaultTimeZoneRef";
@@ -105,6 +106,27 @@ export class LocalDate {
     if (!string) {
       return undefined;
     }
+    // eslint-disable-next-line no-param-reassign
+    string = string.trim();
+
+    // Prefer European/Australian format over American
+    // (DD/MM instead of MM/DD)
+    if (string.match(/^\d{1,2}$/)) {
+      return this.fromMoment(moment(string, "DD"));
+    }
+    if (string.match(/^\d{1,2}\/\d{0,2}$/)) {
+      return this.fromMoment(moment(string, "DD/MM"));
+    }
+    if (string.match(/^\d{1,2}-\d{0,2}$/)) {
+      return this.fromMoment(moment(string, "DD-MM"));
+    }
+    if (string.match(/^(?:\d{1,2}\/){2}\d{0,4}$/)) {
+      return this.fromMoment(moment(string, "DD/MM/YYYY"));
+    }
+    if (string.match(/^(?:\d{1,2}-){2}\d{0,4}$/)) {
+      return this.fromMoment(moment(string, "DD-MM-YYYY"));
+    }
+
     try {
       const timestamp = Date.parse(string);
       const date = new Date(timestamp);
