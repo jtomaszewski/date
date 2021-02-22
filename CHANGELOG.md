@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.2.1](https://github.com/ailohq/date/compare/v2.2.0...v2.2.1) (2021-02-22)
+
+
+### Bug Fixes
+
+* **LocalDate:** Prefer Australian date format in `.parse()` method ([ceb2e21](https://github.com/ailohq/date/commit/ceb2e2196cdbc07fb1ddbf40defae7116e69e021))
+
 ## [2.2.0](https://github.com/ailohq/date/compare/v2.1.6...v2.2.0) (2021-02-19)
 
 
