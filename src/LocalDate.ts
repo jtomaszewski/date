@@ -111,19 +111,29 @@ export class LocalDate {
 
     // Prefer European/Australian format over American
     // (DD/MM instead of MM/DD)
-    if (string.match(/^\d{1,2}$/)) {
+    if (string.match(/^\d{1,2}[/-]?$/)) {
       return this.fromMoment(moment(string, "DD"));
     }
-    if (string.match(/^\d{1,2}\/\d{0,2}$/)) {
+    if (string.match(/^\d{1,2}\/\d{1,2}[/-]?$/)) {
       return this.fromMoment(moment(string, "DD/MM"));
     }
-    if (string.match(/^\d{1,2}-\d{0,2}$/)) {
+    if (string.match(/^\d{1,2}-\d{1,2}[/-]?$/)) {
       return this.fromMoment(moment(string, "DD-MM"));
     }
-    if (string.match(/^(?:\d{1,2}\/){2}\d{0,4}$/)) {
+    if (string.match(/^(?:\d{1,2}\/){2}\d$/)) {
+      return this.fromMoment(
+        moment(`${string.slice(0, -2)}200${string.slice(-1)}`, "DD/MM/YYYY")
+      );
+    }
+    if (string.match(/^(?:\d{1,2}-){2}\d$/)) {
+      return this.fromMoment(
+        moment(`${string.slice(0, -2)}200${string.slice(-1)}`, "DD-MM-YYYY")
+      );
+    }
+    if (string.match(/^(?:\d{1,2}\/){2}\d{2,4}$/)) {
       return this.fromMoment(moment(string, "DD/MM/YYYY"));
     }
-    if (string.match(/^(?:\d{1,2}-){2}\d{0,4}$/)) {
+    if (string.match(/^(?:\d{1,2}-){2}\d{2,4}$/)) {
       return this.fromMoment(moment(string, "DD-MM-YYYY"));
     }
 
