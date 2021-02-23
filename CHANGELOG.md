@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.2.5](https://github.com/ailohq/date/compare/v2.2.4...v2.2.5) (2021-02-23)
+
+
+### Bug Fixes
+
+* **LocalDate:** Accept space as a separator character too (META-285) ([d6007d4](https://github.com/ailohq/date/commit/d6007d4e5c0913bf122a48ea2fcb0da6c117e9ac))
+
 ### [2.2.4](https://github.com/ailohq/date/compare/v2.2.3...v2.2.4) (2021-02-22)
 
 
