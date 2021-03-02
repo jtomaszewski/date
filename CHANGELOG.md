@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.3.0](https://github.com/ailohq/date/compare/v2.2.5...v2.3.0) (2021-03-02)
+
+
+### Features
+
+* **LocalDate:** Add `keepTimeZone` argument to `from` static methods (META-320) ([83963c4](https://github.com/ailohq/date/commit/83963c47ff940a141360061ae233a4a87bfe44c8))
+
 ### [2.2.5](https://github.com/ailohq/date/compare/v2.2.4...v2.2.5) (2021-02-23)
 
 
