@@ -62,14 +62,25 @@ export class LocalDate {
   }
 
   static from(
-    value: string | Date | moment.Moment | LocalDate | DateTimeWithTimeZone
+    value: string | Date | moment.Moment | LocalDate | DateTimeWithTimeZone,
+    {
+      keepTimeZone = true,
+    }: {
+      /**
+       * If `value` is a string/moment datetime, should we keep its' UTC offset while converting timestamp to local date?
+       * If false, we'll convert it to `DefaultTimeZoneRef` first, and then convert it to the local date.
+       *
+       * @default true
+       */
+      keepTimeZone?: boolean;
+    } = {}
   ): LocalDate {
     if (value instanceof LocalDate) {
       return value;
     }
 
     if (value instanceof DateTimeWithTimeZone) {
-      return this.fromMoment(value.moment);
+      return this.fromMoment(value.moment, { keepTimeZone });
     }
 
     if (value instanceof Date) {
@@ -77,14 +88,33 @@ export class LocalDate {
     }
 
     if (typeof value === "string") {
-      return LocalDate.fromString(value);
+      return LocalDate.fromString(value, { keepTimeZone });
     }
 
-    return LocalDate.fromMoment(value);
+    return LocalDate.fromMoment(value, { keepTimeZone });
   }
 
-  static fromMoment(m: moment.Moment): LocalDate {
-    return new LocalDate(m.format(localDateValueFormat));
+  static fromMoment(
+    m: moment.Moment,
+    {
+      keepTimeZone = true,
+    }: {
+      /**
+       * Should we keep moment's UTC offset while converting timestamp to local date?
+       * If false, we'll convert it to `DefaultTimeZoneRef` first, and then convert it to the local date.
+       *
+       * @default true
+       */
+      keepTimeZone?: boolean;
+    } = {}
+  ): LocalDate {
+    if (keepTimeZone) {
+      return new LocalDate(m.format(localDateValueFormat));
+    }
+
+    return new LocalDate(
+      m.tz(DefaultTimeZoneRef.current).format(localDateValueFormat)
+    );
   }
 
   static fromDate(date: Date): LocalDate {
@@ -94,7 +124,27 @@ export class LocalDate {
     return new LocalDate(value);
   }
 
-  static fromString(string: string): LocalDate {
+  static fromString(
+    string: string,
+    {
+      keepTimeZone = true,
+    }: {
+      /**
+       * If `value` is a datetime, should we keep its' UTC offset while converting timestamp to local date?
+       * If false, we'll convert it to `DefaultTimeZoneRef` first, and then convert it to the local date.
+       *
+       * @default true
+       */
+      keepTimeZone?: boolean;
+    } = {}
+  ): LocalDate {
+    if (!keepTimeZone && string.length > localDateValueFormat.length) {
+      return new LocalDate(
+        moment
+          .tz(string, DefaultTimeZoneRef.current)
+          .format(localDateValueFormat)
+      );
+    }
     return new LocalDate(string.slice(0, localDateValueFormat.length));
   }
 

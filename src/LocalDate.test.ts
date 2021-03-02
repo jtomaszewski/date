@@ -1,4 +1,5 @@
 import MockDate from "mockdate";
+import moment from "moment-timezone";
 import { LocalDate } from "./LocalDate";
 
 MockDate.set("2020-09-27T10:00:00");
@@ -7,6 +8,36 @@ const a = new LocalDate("2020-01-01");
 const b = new LocalDate("2021-01-01");
 
 describe("LocalDate", () => {
+  describe("from", () => {
+    it("when constructed from a timestamp string, returns its date", () => {
+      expect(LocalDate.from("2021-03-02T20:00:00Z").toString()).toEqual(
+        "2021-03-02"
+      );
+    });
+
+    it("when constructed from a timestamp string and keepTimeZone is false, returns date in the default time zone", () => {
+      expect(
+        LocalDate.from("2021-03-02T20:00:00Z", {
+          keepTimeZone: false,
+        }).toString()
+      ).toEqual("2021-03-03");
+    });
+
+    it("when constructed from a moment, returns its date", () => {
+      expect(
+        LocalDate.from(moment.utc("2021-03-02T20:00:00Z")).toString()
+      ).toEqual("2021-03-02");
+    });
+
+    it("when constructed from a moment and keepTimeZone is false, returns date in the default time zone", () => {
+      expect(
+        LocalDate.from(moment.utc("2021-03-02T20:00:00Z"), {
+          keepTimeZone: false,
+        }).toString()
+      ).toEqual("2021-03-03");
+    });
+  });
+
   it("min returns earlier date", () => {
     expect(LocalDate.min()).toEqual(undefined);
     expect(LocalDate.min(a)).toEqual(a);
