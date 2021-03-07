@@ -18,17 +18,20 @@ export type LocalDateUnit =
   | "d";
 
 export type LocalDateFormat =
-  | "D"
-  | "MMM"
-  | "D MMM"
-  | "DD MMM"
-  | "DD MMMM"
-  | "DD MMM YY"
+  | "D MMM YY"
   | "D MMM YYYY"
-  | "DD MMMM YYYY"
+  | "D MMM"
+  | "D MMMM YYYY"
+  | "D MMMM"
+  | "D"
+  | "DD MMM YY"
   | "DD MMM YYYY"
-  | "YYYY-MM-DD"
+  | "DD MMM"
+  | "DD MMMM YYYY"
+  | "DD MMMM"
   | "DD/MM/YYYY"
+  | "MMM"
+  | "YYYY-MM-DD"
   | "Do [of] MMMM YYYY";
 
 interface FormatOptions {
