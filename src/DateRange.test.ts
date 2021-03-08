@@ -86,22 +86,34 @@ describe("DateRange", () => {
 
   it(".contains returns true if date range is currently ongoing", () => {
     expect(
-      new DateRange(LocalDate.yesterday(), LocalDate.yesterday()).contains()
+      new DateRange(LocalDate.yesterday(), LocalDate.yesterday()).contains(
+        LocalDate.today()
+      )
     ).toEqual(false);
     expect(
-      new DateRange(LocalDate.yesterday(), LocalDate.today()).contains()
+      new DateRange(LocalDate.yesterday(), LocalDate.today()).contains(
+        LocalDate.today()
+      )
     ).toEqual(true);
     expect(
-      new DateRange(LocalDate.yesterday(), LocalDate.tomorrow()).contains()
+      new DateRange(LocalDate.yesterday(), LocalDate.tomorrow()).contains(
+        LocalDate.today()
+      )
     ).toEqual(true);
     expect(
-      new DateRange(LocalDate.today(), LocalDate.today()).contains()
+      new DateRange(LocalDate.today(), LocalDate.today()).contains(
+        LocalDate.today()
+      )
     ).toEqual(true);
     expect(
-      new DateRange(LocalDate.today(), LocalDate.tomorrow()).contains()
+      new DateRange(LocalDate.today(), LocalDate.tomorrow()).contains(
+        LocalDate.today()
+      )
     ).toEqual(true);
     expect(
-      new DateRange(LocalDate.tomorrow(), LocalDate.tomorrow()).contains()
+      new DateRange(LocalDate.tomorrow(), LocalDate.tomorrow()).contains(
+        LocalDate.today()
+      )
     ).toEqual(false);
   });
 

@@ -41,7 +41,7 @@ export class DateRange {
     return this.getCurrentness(date) === "past";
   }
 
-  contains(date: LocalDate = LocalDate.today()): boolean {
+  contains(date: LocalDate): boolean {
     return this.getCurrentness(date) === "current";
   }
 
