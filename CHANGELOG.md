@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.4.0](https://github.com/ailohq/date/compare/v2.3.2...v2.4.0) (2021-03-22)
+
+
+### Features
+
+* Add `.compare` static function to `LocalDate` and `DateRange` ([3bdd077](https://github.com/ailohq/date/commit/3bdd077d90511354bb4a0316a2fcafc6de584898))
+
 ### [2.3.2](https://github.com/ailohq/date/compare/v2.3.1...v2.3.2) (2021-03-08)
 
 ### [2.3.1](https://github.com/ailohq/date/compare/v2.3.0...v2.3.1) (2021-03-07)
