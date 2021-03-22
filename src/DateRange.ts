@@ -25,6 +25,23 @@ export class DateRange {
     return new DateRange(start, end);
   }
 
+  static compare(a: DateRange, b: DateRange): number {
+    if (a.start.value === b.start.value) {
+      if (a.end && b.end) {
+        return LocalDate.compare(a.end, b.end);
+      }
+      if (!a.end && b.end) {
+        return -1;
+      }
+      if (a.end && !b.end) {
+        return 1;
+      }
+      return 0;
+    }
+
+    return LocalDate.compare(a.start, b.start);
+  }
+
   getCurrentness(asOf: LocalDate = LocalDate.today()): DateRangeCurrentness {
     if (this.start.isAfter(asOf)) {
       return "future";

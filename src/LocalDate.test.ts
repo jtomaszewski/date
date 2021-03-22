@@ -161,4 +161,11 @@ describe("LocalDate", () => {
       });
     });
   });
+
+  describe("compare", () => {
+    it("compares the dates in ascending order", () => {
+      expect([a, b].sort(LocalDate.compare)).toEqual([a, b]);
+      expect([b, a].sort(LocalDate.compare)).toEqual([a, b]);
+    });
+  });
 });

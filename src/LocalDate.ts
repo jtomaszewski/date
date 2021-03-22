@@ -249,6 +249,10 @@ export class LocalDate {
     );
   }
 
+  static compare(a: LocalDate, b: LocalDate): number {
+    return a.isBefore(b) ? -1 : a.isAfter(b) ? 1 : 0;
+  }
+
   setMonth(month: number): LocalDate {
     return new LocalDate(
       this.moment.clone().month(month).format(localDateValueFormat)

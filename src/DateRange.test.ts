@@ -147,4 +147,28 @@ describe("DateRange", () => {
       expect(new DateRange(a).format()).toEqual("From 2000-01-01");
     });
   });
+
+  describe("compare", () => {
+    it("compares the dates in ascending order", () => {
+      const r1 = new DateRange(a, a);
+      const r2 = new DateRange(a, b);
+      const r3 = new DateRange(b, b);
+      const r4 = new DateRange(a);
+      const r5 = new DateRange(b);
+      expect([r1, r2, r3, r4, r5].sort(DateRange.compare)).toEqual([
+        r4,
+        r1,
+        r2,
+        r5,
+        r3,
+      ]);
+      expect([r5, r4, r3, r2, r1].sort(DateRange.compare)).toEqual([
+        r4,
+        r1,
+        r2,
+        r5,
+        r3,
+      ]);
+    });
+  });
 });
