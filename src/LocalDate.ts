@@ -283,6 +283,10 @@ export class LocalDate {
     );
   }
 
+  diff(otherDate: LocalDate, unit: LocalDateUnit = "day"): number {
+    return this.moment.clone().diff(otherDate.moment, unit);
+  }
+
   isBefore(date: LocalDate): boolean {
     return this.moment.isBefore(date.moment, "day");
   }

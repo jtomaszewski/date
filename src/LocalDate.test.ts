@@ -168,4 +168,11 @@ describe("LocalDate", () => {
       expect([b, a].sort(LocalDate.compare)).toEqual([a, b]);
     });
   });
+
+  describe("diff", () => {
+    it("if unit arg is not given, returns difference in days between the dates", () => {
+      expect(a.diff(b)).toEqual(-366);
+      expect(b.diff(a)).toEqual(366);
+    });
+  });
 });
