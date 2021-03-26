@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.5.0](https://github.com/ailohq/date/compare/v2.4.0...v2.5.0) (2021-03-26)
+
+
+### Features
+
+* **LocalDate:** Add `.diff()` method ([d1b0f34](https://github.com/ailohq/date/commit/d1b0f3461da2bd72a9741a06727b7497b3f08ea3))
+
 ## [2.4.0](https://github.com/ailohq/date/compare/v2.3.2...v2.4.0) (2021-03-22)
 
 
