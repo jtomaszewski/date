@@ -140,7 +140,7 @@ describe("DateRange", () => {
 
   describe(".format", () => {
     it("if end date is specified, returns formatted date range", () => {
-      expect(new DateRange(a, b).format()).toEqual("2000-01-01 - 2000-01-31");
+      expect(new DateRange(a, b).format()).toEqual("2000-01-01 – 2000-01-31");
     });
 
     it('if end date isn\'t specified, returns formatted "From: START_DATE"', () => {

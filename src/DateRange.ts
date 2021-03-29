@@ -68,7 +68,7 @@ export class DateRange {
 
   format({ dateFormat }: { dateFormat?: LocalDateFormat } = {}): string {
     if (this.end) {
-      return `${this.start.format(dateFormat)} - ${this.end.format(
+      return `${this.start.format(dateFormat)} – ${this.end.format(
         dateFormat
       )}`;
     }
