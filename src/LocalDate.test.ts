@@ -9,6 +9,18 @@ const b = new LocalDate("2021-01-01");
 
 describe("LocalDate", () => {
   describe("from", () => {
+    it("when constructed from a date string, returns its date", () => {
+      expect(LocalDate.from("2021-01-01").toString()).toEqual("2021-01-01");
+      expect(LocalDate.from("2021-01-15").toString()).toEqual("2021-01-15");
+      expect(LocalDate.from("2021-02-01").toString()).toEqual("2021-02-01");
+      expect(LocalDate.from("2021-02-15").toString()).toEqual("2021-02-15");
+      expect(LocalDate.from("2021-02-28").toString()).toEqual("2021-02-28");
+      expect(LocalDate.from("2021-03-01").toString()).toEqual("2021-03-01");
+      expect(LocalDate.from("2021-03-15").toString()).toEqual("2021-03-15");
+      expect(LocalDate.from("2021-03-31").toString()).toEqual("2021-03-31");
+      expect(LocalDate.from("2021-04-01").toString()).toEqual("2021-04-01");
+    });
+
     it("when constructed from a timestamp string, returns its date", () => {
       expect(LocalDate.from("2021-03-02T20:00:00Z").toString()).toEqual(
         "2021-03-02"
@@ -174,5 +186,35 @@ describe("LocalDate", () => {
       expect(a.diff(b)).toEqual(-366);
       expect(b.diff(a)).toEqual(366);
     });
+  });
+
+  it("toDate() returns Date obj that has the same date", () => {
+    expect(LocalDate.from("2021-01-01").toDate().toString()).toMatch(
+      "Jan 01 2021"
+    );
+    expect(LocalDate.from("2021-01-15").toDate().toString()).toMatch(
+      "Jan 15 2021"
+    );
+    expect(LocalDate.from("2021-02-01").toDate().toString()).toMatch(
+      "Feb 01 2021"
+    );
+    expect(LocalDate.from("2021-02-15").toDate().toString()).toMatch(
+      "Feb 15 2021"
+    );
+    expect(LocalDate.from("2021-02-28").toDate().toString()).toMatch(
+      "Feb 28 2021"
+    );
+    expect(LocalDate.from("2021-03-01").toDate().toString()).toMatch(
+      "Mar 01 2021"
+    );
+    expect(LocalDate.from("2021-03-15").toDate().toString()).toMatch(
+      "Mar 15 2021"
+    );
+    expect(LocalDate.from("2021-03-31").toDate().toString()).toMatch(
+      "Mar 31 2021"
+    );
+    expect(LocalDate.from("2021-04-01").toDate().toString()).toMatch(
+      "Apr 01 2021"
+    );
   });
 });

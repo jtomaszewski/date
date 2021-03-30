@@ -319,9 +319,11 @@ export class LocalDate {
 
   toDate(): Date {
     const date = new Date();
-    date.setFullYear(this.moment.year());
-    date.setMonth(this.moment.month());
-    date.setDate(this.moment.date());
+    date.setFullYear(
+      this.moment.year(),
+      this.moment.month(),
+      this.moment.date()
+    );
     return date;
   }
 }
