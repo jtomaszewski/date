@@ -205,6 +205,14 @@ export class DateTimeWithTimeZone {
     return this.moment.startOf("day").diff(this.now().startOf("day"), "days");
   }
 
+  daysBeforeDate(date: DateTimeWithTimeZone): number {
+    return date.moment.startOf("day").diff(this.moment.startOf("day"), "days");
+  }
+
+  daysAfterDate(date: DateTimeWithTimeZone): number {
+    return this.moment.startOf("day").diff(date.moment.startOf("day"), "days");
+  }
+
   toISOString(): string {
     return this.moment.toISOString(true);
   }
