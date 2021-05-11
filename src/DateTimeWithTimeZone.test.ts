@@ -284,3 +284,119 @@ describe.each`
     });
   });
 });
+
+describe("daysBeforeDate", () => {
+  const givenDate = DateTimeWithTimeZone.from("2020-09-15T00:00:00+1000");
+
+  describe("when date is before given date", () => {
+    it("should return positive integer", () => {
+      expect(
+        DateTimeWithTimeZone.from("2020-09-14T00:00:00+1000").daysBeforeDate(
+          givenDate
+        )
+      ).toEqual(1);
+      expect(
+        DateTimeWithTimeZone.from("2020-09-14T23:59:59+1000").daysBeforeDate(
+          givenDate
+        )
+      ).toEqual(1);
+      expect(
+        DateTimeWithTimeZone.from("2020-09-14").daysBeforeDate(givenDate)
+      ).toEqual(1);
+    });
+  });
+  describe("when date is after given date", () => {
+    it("should return negative integer", () => {
+      expect(
+        DateTimeWithTimeZone.from("2020-09-16T00:00:00+1000").daysBeforeDate(
+          givenDate
+        )
+      ).toEqual(-1);
+      expect(
+        DateTimeWithTimeZone.from("2020-09-16T23:59:59+1000").daysBeforeDate(
+          givenDate
+        )
+      ).toEqual(-1);
+      expect(
+        DateTimeWithTimeZone.from("2020-09-16").daysBeforeDate(givenDate)
+      ).toEqual(-1);
+    });
+  });
+  describe("when date is the same as given date", () => {
+    it("should return zero", () => {
+      expect(
+        DateTimeWithTimeZone.from("2020-09-15T00:00:00+1000").daysBeforeDate(
+          givenDate
+        )
+      ).toEqual(0);
+      expect(
+        DateTimeWithTimeZone.from("2020-09-15T23:59:59+1000").daysBeforeDate(
+          givenDate
+        )
+      ).toEqual(0);
+      expect(
+        DateTimeWithTimeZone.from("2020-09-15").daysBeforeDate(givenDate)
+      ).toEqual(0);
+    });
+  });
+});
+
+describe("daysAfterToday", () => {
+  const givenDate = DateTimeWithTimeZone.from("2020-09-15T00:00:00+1000");
+  // eslint-disable-next-line jest/no-identical-title
+  describe("when date is before given date", () => {
+    it("should return negative integer", () => {
+      expect(
+        DateTimeWithTimeZone.from("2020-09-14T00:00:00+1000").daysAfterDate(
+          givenDate
+        )
+      ).toEqual(-1);
+      expect(
+        DateTimeWithTimeZone.from("2020-09-14T23:59:59+1000").daysAfterDate(
+          givenDate
+        )
+      ).toEqual(-1);
+      expect(
+        DateTimeWithTimeZone.from("2020-09-14").daysAfterDate(givenDate)
+      ).toEqual(-1);
+    });
+  });
+
+  // eslint-disable-next-line jest/no-identical-title
+  describe("when date is after given date", () => {
+    it("should return positive integer", () => {
+      expect(
+        DateTimeWithTimeZone.from("2020-09-16T00:00:00+1000").daysAfterDate(
+          givenDate
+        )
+      ).toEqual(1);
+      expect(
+        DateTimeWithTimeZone.from("2020-09-16T23:59:59+1000").daysAfterDate(
+          givenDate
+        )
+      ).toEqual(1);
+      expect(
+        DateTimeWithTimeZone.from("2020-09-16").daysAfterDate(givenDate)
+      ).toEqual(1);
+    });
+  });
+
+  // eslint-disable-next-line jest/no-identical-title
+  describe("when date is the same as given date", () => {
+    it("should return zero", () => {
+      expect(
+        DateTimeWithTimeZone.from("2020-09-15T00:00:00+1000").daysAfterDate(
+          givenDate
+        )
+      ).toEqual(0);
+      expect(
+        DateTimeWithTimeZone.from("2020-09-15T23:59:59+1000").daysAfterDate(
+          givenDate
+        )
+      ).toEqual(0);
+      expect(
+        DateTimeWithTimeZone.from("2020-09-15").daysAfterDate(givenDate)
+      ).toEqual(0);
+    });
+  });
+});
