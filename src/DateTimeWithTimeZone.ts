@@ -3,7 +3,7 @@ import { DefaultTimeZoneRef } from "./DefaultTimeZoneRef";
 import { LocalDate, LocalDateFormat, localDateValueFormat } from "./LocalDate";
 
 interface FormatOptions {
-  type: LocalDateFormat | "DD MMM YYYY h:mm A";
+  type: LocalDateFormat | "DD MMM YYYY h:mm A" | "DD/MM/YYYY, HH:mm:ss";
 }
 
 type FriendlyFormatType = "date" | "datetime";

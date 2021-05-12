@@ -62,6 +62,18 @@ describe("now", () => {
   });
 });
 
+describe("format", () => {
+  beforeEach(() => {
+    MockDate.set("2020-09-27T22:21:23");
+  });
+
+  it("formats correctly all supported datetime formats", () => {
+    const now = DateTimeWithTimeZone.now();
+    expect(now.format("DD MMM YYYY h:mm A")).toEqual("27 Sep 2020 10:21 PM");
+    expect(now.format("DD/MM/YYYY, HH:mm:ss")).toEqual("27/09/2020, 22:21:23");
+  });
+});
+
 describe("isOverdue", () => {
   const today = "2020-09-27T10:21:23";
 
