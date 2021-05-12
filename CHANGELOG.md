@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.6.0](https://github.com/ailohq/date/compare/v2.5.2...v2.6.0) (2021-05-12)
+
+
+### Features
+
+* **DateTimeWithTimeZone:** Add `"DD/MM/YYYY, HH:mm:ss"` format which is currently used by admin ui ([295d977](https://github.com/ailohq/date/commit/295d9776bb17b3a942fb26e4e00c8c3b9d1ded56))
+
 ### [2.5.4](https://github.com/ailohq/date/compare/v2.5.2...v2.5.4) (2021-05-11)
 
 ### [2.5.3](https://github.com/ailohq/date/compare/v2.5.2...v2.5.3) (2021-05-11)
