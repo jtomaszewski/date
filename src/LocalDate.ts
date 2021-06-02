@@ -258,11 +258,11 @@ export class LocalDate {
   }
 
   getDayOfMonth(): number {
-    return this.moment.clone().date();
+    return this.moment.date();
   }
 
   getDayOfWeek(): number {
-    return this.moment.clone().isoWeekday();
+    return this.moment.isoWeekday();
   }
 
   setMonth(month: number): LocalDate {
