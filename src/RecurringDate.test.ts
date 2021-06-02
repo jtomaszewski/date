@@ -10,42 +10,42 @@ const dailyRecurringDate = new RecurringDate({
 describe("RecurringDate", () => {
   describe("getNextOccurrence", () => {
     describe.each`
-      anniversaryDay | anniversaryMonth | startDate       | asOf            | frequency        | inclusive | expected        | description
-      ${null}        | ${null}          | ${null}         | ${"2020-04-27"} | ${"daily"}       | ${false}  | ${"2020-04-28"} | ${"daily cycle"}
-      ${null}        | ${null}          | ${null}         | ${"2020-04-27"} | ${"daily"}       | ${true}   | ${"2020-04-27"} | ${"daily cycle returns same day if inclusive"}
-      ${27}          | ${null}          | ${null}         | ${"2020-04-27"} | ${"monthly"}     | ${false}  | ${"2020-05-27"} | ${"monthly cycle"}
-      ${27}          | ${null}          | ${null}         | ${"2020-04-27"} | ${"monthly"}     | ${true}   | ${"2020-04-27"} | ${"monthly cycle returns same day if inclusive and occurrence today"}
-      ${27}          | ${null}          | ${null}         | ${"2020-04-28"} | ${"monthly"}     | ${false}  | ${"2020-05-27"} | ${"asOf at the start of a monthly cycle"}
-      ${27}          | ${null}          | ${null}         | ${"2020-04-28"} | ${"monthly"}     | ${true}   | ${"2020-05-27"} | ${"returns next occurrence if inclusive is true and no occurrence today"}
-      ${null}        | ${null}          | ${"2019-01-27"} | ${"2020-04-28"} | ${"monthly"}     | ${false}  | ${"2020-05-27"} | ${"create monthly cycle from date"}
-      ${27}          | ${1}             | ${null}         | ${"2020-05-01"} | ${"annually"}    | ${false}  | ${"2021-01-27"} | ${"yearly cycle"}
-      ${27}          | ${1}             | ${null}         | ${"2021-01-28"} | ${"annually"}    | ${false}  | ${"2022-01-27"} | ${"asOf at the start of a yearly cycle"}
-      ${null}        | ${null}          | ${"3000-03-05"} | ${"2021-05-28"} | ${"annually"}    | ${false}  | ${"2022-03-05"} | ${"create yearly cycle from date"}
-      ${3}           | ${null}          | ${null}         | ${"2020-11-01"} | ${"weekly"}      | ${false}  | ${"2020-11-04"} | ${"weekly cycle asOf Sunday"}
-      ${1}           | ${null}          | ${null}         | ${"2020-11-02"} | ${"weekly"}      | ${false}  | ${"2020-11-09"} | ${"weekly cycle asOf Monday end day Monday"}
-      ${1}           | ${null}          | ${null}         | ${"2020-11-02"} | ${"weekly"}      | ${true}   | ${"2020-11-02"} | ${"weekly cycle returns same day if inclusive and occurrence today"}
-      ${null}        | ${null}          | ${"2020-11-09"} | ${"2020-11-02"} | ${"weekly"}      | ${false}  | ${"2020-11-09"} | ${"weekly cycle with start date exactly one week ahead"}
-      ${null}        | ${null}          | ${"2020-11-10"} | ${"2020-11-02"} | ${"weekly"}      | ${false}  | ${"2020-11-03"} | ${"weekly cycle with start date eight days ahead"}
-      ${null}        | ${null}          | ${"2020-11-01"} | ${"2020-11-02"} | ${"weekly"}      | ${false}  | ${"2020-11-08"} | ${"weekly cycle with start date day before"}
-      ${null}        | ${null}          | ${"2020-10-26"} | ${"2020-11-02"} | ${"weekly"}      | ${false}  | ${"2020-11-09"} | ${"weekly cycle with start date exactly one week before"}
-      ${2}           | ${null}          | ${null}         | ${"2020-11-02"} | ${"weekly"}      | ${false}  | ${"2020-11-03"} | ${"weekly cycle asOf Monday end day Tuesday"}
-      ${3}           | ${null}          | ${null}         | ${"2020-11-02"} | ${"weekly"}      | ${false}  | ${"2020-11-04"} | ${"weekly cycle asOf Monday end day Wednesday"}
-      ${4}           | ${null}          | ${null}         | ${"2020-11-02"} | ${"weekly"}      | ${false}  | ${"2020-11-05"} | ${"weekly cycle asOf Monday end day Thursday"}
-      ${5}           | ${null}          | ${null}         | ${"2020-11-02"} | ${"weekly"}      | ${false}  | ${"2020-11-06"} | ${"weekly cycle asOf Monday end day Friday"}
-      ${6}           | ${null}          | ${null}         | ${"2020-11-02"} | ${"weekly"}      | ${false}  | ${"2020-11-07"} | ${"weekly cycle asOf Monday end day Saturday"}
-      ${7}           | ${null}          | ${null}         | ${"2020-11-02"} | ${"weekly"}      | ${false}  | ${"2020-11-08"} | ${"weekly cycle asOf Monday end day Sunday"}
-      ${1}           | ${null}          | ${null}         | ${"2020-12-26"} | ${"weekly"}      | ${false}  | ${"2020-12-28"} | ${"weekly cycle near end of month asOf Saturday end day Monday"}
-      ${2}           | ${null}          | ${null}         | ${"2020-12-26"} | ${"weekly"}      | ${false}  | ${"2020-12-29"} | ${"weekly cycle near end of month asOf Saturday end day Tuesday"}
-      ${3}           | ${null}          | ${null}         | ${"2020-12-26"} | ${"weekly"}      | ${false}  | ${"2020-12-30"} | ${"weekly cycle near end of month asOf Saturday end day Wednesday"}
-      ${4}           | ${null}          | ${null}         | ${"2020-12-26"} | ${"weekly"}      | ${false}  | ${"2020-12-31"} | ${"weekly cycle near end of month asOf Saturday end day Thursday"}
-      ${5}           | ${null}          | ${null}         | ${"2020-12-26"} | ${"weekly"}      | ${false}  | ${"2021-01-01"} | ${"weekly cycle near end of month asOf Saturday end day Friday"}
-      ${6}           | ${null}          | ${null}         | ${"2020-12-26"} | ${"weekly"}      | ${false}  | ${"2021-01-02"} | ${"weekly cycle near end of month asOf Saturday end day Saturday"}
-      ${7}           | ${null}          | ${null}         | ${"2020-12-26"} | ${"weekly"}      | ${false}  | ${"2020-12-27"} | ${"weekly cycle near end of month asOf Saturday end day Sunday"}
-      ${null}        | ${null}          | ${"2020-08-22"} | ${"2020-07-15"} | ${"fortnightly"} | ${false}  | ${"2020-07-25"} | ${"fortnightly cycle with start date after asOf"}
-      ${null}        | ${null}          | ${"2020-07-10"} | ${"2020-07-15"} | ${"fortnightly"} | ${false}  | ${"2020-07-24"} | ${"fortnightly cycle with recent start date"}
-      ${null}        | ${null}          | ${"2020-07-15"} | ${"2020-07-15"} | ${"fortnightly"} | ${false}  | ${"2020-07-29"} | ${"fortnightly cycle asOf start date"}
-      ${null}        | ${null}          | ${"2020-07-15"} | ${"2020-07-15"} | ${"fortnightly"} | ${true}   | ${"2020-07-15"} | ${"fortnightly cycle returns same day if inclusive and occurrence today"}
-      ${null}        | ${null}          | ${"2020-04-10"} | ${"2020-07-15"} | ${"fortnightly"} | ${false}  | ${"2020-07-17"} | ${"fortnightly cycle with less recent start date"}
+      anniversaryDay | anniversaryMonth | startDate       | asOf            | frequency        | inclusive | expectedNext    | expectedPrevious | description
+      ${null}        | ${null}          | ${null}         | ${"2020-04-27"} | ${"daily"}       | ${false}  | ${"2020-04-28"} | ${"2020-04-26"}  | ${"daily cycle"}
+      ${null}        | ${null}          | ${null}         | ${"2020-04-27"} | ${"daily"}       | ${true}   | ${"2020-04-27"} | ${"2020-04-27"}  | ${"daily cycle returns same day if inclusive"}
+      ${27}          | ${null}          | ${null}         | ${"2020-04-27"} | ${"monthly"}     | ${false}  | ${"2020-05-27"} | ${"2020-03-27"}  | ${"monthly cycle"}
+      ${27}          | ${null}          | ${null}         | ${"2020-04-27"} | ${"monthly"}     | ${true}   | ${"2020-04-27"} | ${"2020-04-27"}  | ${"monthly cycle returns same day if inclusive and occurrence today"}
+      ${27}          | ${null}          | ${null}         | ${"2020-04-28"} | ${"monthly"}     | ${false}  | ${"2020-05-27"} | ${"2020-04-27"}  | ${"asOf at the start of a monthly cycle"}
+      ${27}          | ${null}          | ${null}         | ${"2020-04-28"} | ${"monthly"}     | ${true}   | ${"2020-05-27"} | ${"2020-04-27"}  | ${"returns next occurrence if inclusive is true and no occurrence today"}
+      ${null}        | ${null}          | ${"2019-01-27"} | ${"2020-04-28"} | ${"monthly"}     | ${false}  | ${"2020-05-27"} | ${"2020-04-27"}  | ${"create monthly cycle from date"}
+      ${27}          | ${1}             | ${null}         | ${"2020-05-01"} | ${"annually"}    | ${false}  | ${"2021-01-27"} | ${"2020-01-27"}  | ${"yearly cycle"}
+      ${27}          | ${1}             | ${null}         | ${"2021-01-28"} | ${"annually"}    | ${false}  | ${"2022-01-27"} | ${"2021-01-27"}  | ${"asOf at the start of a yearly cycle"}
+      ${null}        | ${null}          | ${"3000-03-05"} | ${"2021-05-28"} | ${"annually"}    | ${false}  | ${"2022-03-05"} | ${"2021-03-05"}  | ${"create yearly cycle from date"}
+      ${3}           | ${null}          | ${null}         | ${"2020-11-01"} | ${"weekly"}      | ${false}  | ${"2020-11-04"} | ${"2020-10-28"}  | ${"weekly cycle asOf Sunday"}
+      ${1}           | ${null}          | ${null}         | ${"2020-11-02"} | ${"weekly"}      | ${false}  | ${"2020-11-09"} | ${"2020-10-26"}  | ${"weekly cycle asOf Monday end day Monday"}
+      ${1}           | ${null}          | ${null}         | ${"2020-11-02"} | ${"weekly"}      | ${true}   | ${"2020-11-02"} | ${"2020-11-02"}  | ${"weekly cycle returns same day if inclusive and occurrence today"}
+      ${null}        | ${null}          | ${"2020-11-09"} | ${"2020-11-02"} | ${"weekly"}      | ${false}  | ${"2020-11-09"} | ${"2020-10-26"}  | ${"weekly cycle with start date exactly one week ahead"}
+      ${null}        | ${null}          | ${"2020-11-10"} | ${"2020-11-02"} | ${"weekly"}      | ${false}  | ${"2020-11-03"} | ${"2020-10-27"}  | ${"weekly cycle with start date eight days ahead"}
+      ${null}        | ${null}          | ${"2020-11-01"} | ${"2020-11-02"} | ${"weekly"}      | ${false}  | ${"2020-11-08"} | ${"2020-11-01"}  | ${"weekly cycle with start date day before"}
+      ${null}        | ${null}          | ${"2020-10-26"} | ${"2020-11-02"} | ${"weekly"}      | ${false}  | ${"2020-11-09"} | ${"2020-10-26"}  | ${"weekly cycle with start date exactly one week before"}
+      ${2}           | ${null}          | ${null}         | ${"2020-11-02"} | ${"weekly"}      | ${false}  | ${"2020-11-03"} | ${"2020-10-27"}  | ${"weekly cycle asOf Monday end day Tuesday"}
+      ${3}           | ${null}          | ${null}         | ${"2020-11-02"} | ${"weekly"}      | ${false}  | ${"2020-11-04"} | ${"2020-10-28"}  | ${"weekly cycle asOf Monday end day Wednesday"}
+      ${4}           | ${null}          | ${null}         | ${"2020-11-02"} | ${"weekly"}      | ${false}  | ${"2020-11-05"} | ${"2020-10-29"}  | ${"weekly cycle asOf Monday end day Thursday"}
+      ${5}           | ${null}          | ${null}         | ${"2020-11-02"} | ${"weekly"}      | ${false}  | ${"2020-11-06"} | ${"2020-10-30"}  | ${"weekly cycle asOf Monday end day Friday"}
+      ${6}           | ${null}          | ${null}         | ${"2020-11-02"} | ${"weekly"}      | ${false}  | ${"2020-11-07"} | ${"2020-10-31"}  | ${"weekly cycle asOf Monday end day Saturday"}
+      ${7}           | ${null}          | ${null}         | ${"2020-11-02"} | ${"weekly"}      | ${false}  | ${"2020-11-08"} | ${"2020-11-01"}  | ${"weekly cycle asOf Monday end day Sunday"}
+      ${1}           | ${null}          | ${null}         | ${"2020-12-26"} | ${"weekly"}      | ${false}  | ${"2020-12-28"} | ${"2020-12-21"}  | ${"weekly cycle near end of month asOf Saturday end day Monday"}
+      ${2}           | ${null}          | ${null}         | ${"2020-12-26"} | ${"weekly"}      | ${false}  | ${"2020-12-29"} | ${"2020-12-22"}  | ${"weekly cycle near end of month asOf Saturday end day Tuesday"}
+      ${3}           | ${null}          | ${null}         | ${"2020-12-26"} | ${"weekly"}      | ${false}  | ${"2020-12-30"} | ${"2020-12-23"}  | ${"weekly cycle near end of month asOf Saturday end day Wednesday"}
+      ${4}           | ${null}          | ${null}         | ${"2020-12-26"} | ${"weekly"}      | ${false}  | ${"2020-12-31"} | ${"2020-12-24"}  | ${"weekly cycle near end of month asOf Saturday end day Thursday"}
+      ${5}           | ${null}          | ${null}         | ${"2020-12-26"} | ${"weekly"}      | ${false}  | ${"2021-01-01"} | ${"2020-12-25"}  | ${"weekly cycle near end of month asOf Saturday end day Friday"}
+      ${6}           | ${null}          | ${null}         | ${"2020-12-26"} | ${"weekly"}      | ${false}  | ${"2021-01-02"} | ${"2020-12-19"}  | ${"weekly cycle near end of month asOf Saturday end day Saturday"}
+      ${7}           | ${null}          | ${null}         | ${"2020-12-26"} | ${"weekly"}      | ${false}  | ${"2020-12-27"} | ${"2020-12-20"}  | ${"weekly cycle near end of month asOf Saturday end day Sunday"}
+      ${null}        | ${null}          | ${"2020-08-22"} | ${"2020-07-15"} | ${"fortnightly"} | ${false}  | ${"2020-07-25"} | ${"2020-07-11"}  | ${"fortnightly cycle with start date after asOf"}
+      ${null}        | ${null}          | ${"2020-07-10"} | ${"2020-07-15"} | ${"fortnightly"} | ${false}  | ${"2020-07-24"} | ${"2020-07-10"}  | ${"fortnightly cycle with recent start date"}
+      ${null}        | ${null}          | ${"2020-07-15"} | ${"2020-07-15"} | ${"fortnightly"} | ${false}  | ${"2020-07-29"} | ${"2020-07-01"}  | ${"fortnightly cycle asOf start date"}
+      ${null}        | ${null}          | ${"2020-07-15"} | ${"2020-07-15"} | ${"fortnightly"} | ${true}   | ${"2020-07-15"} | ${"2020-07-15"}  | ${"fortnightly cycle returns same day if inclusive and occurrence today"}
+      ${null}        | ${null}          | ${"2020-04-10"} | ${"2020-07-15"} | ${"fortnightly"} | ${false}  | ${"2020-07-17"} | ${"2020-07-03"}  | ${"fortnightly cycle with less recent start date"}
     `(
       "$description",
       ({
@@ -54,22 +54,32 @@ describe("RecurringDate", () => {
         startDate,
         asOf,
         frequency,
-        expected,
+        expectedNext,
+        expectedPrevious,
         inclusive,
       }) => {
-        it(`should return ${expected}`, () => {
-          expect(
-            new RecurringDate({
-              anniversaryDay,
-              anniversaryMonth,
-              startDate: startDate ? LocalDate.from(startDate) : null,
+        const recurringDate = new RecurringDate({
+          anniversaryDay,
+          anniversaryMonth,
+          startDate: startDate ? LocalDate.from(startDate) : null,
+          frequency,
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } as any);
 
-              frequency,
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            } as any)
+        it(`should return next occurrence ${expectedNext}`, () => {
+          expect(
+            recurringDate
               .getNextOccurrence(LocalDate.from(asOf), { inclusive })
               .toString()
-          ).toEqual(expected);
+          ).toEqual(expectedNext);
+        });
+
+        it(`should return previous occurrence ${expectedPrevious}`, () => {
+          expect(
+            recurringDate
+              .getPreviousOccurrence(LocalDate.from(asOf), { inclusive })
+              .toString()
+          ).toEqual(expectedPrevious);
         });
       }
     );
