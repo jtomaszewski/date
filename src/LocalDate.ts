@@ -253,15 +253,19 @@ export class LocalDate {
     return a.isBefore(b) ? -1 : a.isAfter(b) ? 1 : 0;
   }
 
-  getMonth(): number {
+  get daysInMonth(): number {
+    return this.moment.daysInMonth();
+  }
+
+  get month(): number {
     return this.moment.month();
   }
 
-  getDayOfMonth(): number {
+  get dayOfMonth(): number {
     return this.moment.date();
   }
 
-  getDayOfWeek(): number {
+  get dayOfWeek(): number {
     return this.moment.isoWeekday();
   }
 

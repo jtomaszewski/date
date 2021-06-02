@@ -144,18 +144,18 @@ export class RecurringDate {
 
         case "weekly":
           return `${moment()
-            .isoWeekday(this.anchorDate.getDayOfWeek())
+            .isoWeekday(this.anchorDate.dayOfWeek)
             .format("dddd")} each week`;
 
         case "monthly":
           return `${moment()
-            .date(this.anchorDate.getDayOfMonth())
+            .date(this.anchorDate.dayOfMonth)
             .format("Do")} of each month`;
 
         case "annually":
           return `${moment()
-            .date(this.anchorDate.getDayOfMonth())
-            .month(this.anchorDate.getMonth())
+            .date(this.anchorDate.dayOfMonth)
+            .month(this.anchorDate.month)
             .format("Do MMMM")} each year`;
       }
     }

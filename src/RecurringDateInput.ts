@@ -61,7 +61,7 @@ export function getValidAnchorDate(data: {
     const localStartDate = LocalDate.from(startDate);
     if (
       (frequency === "monthly" || frequency === "annually") &&
-      localStartDate.getDayOfMonth() > 28
+      localStartDate.dayOfMonth > 28
     ) {
       throw new TypeError(`anniversaryDay must be less than or equal to 28`);
     }
