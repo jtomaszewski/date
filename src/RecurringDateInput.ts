@@ -49,17 +49,12 @@ export type RecurringDateInput =
   | MonthlyRecurringDateInput
   | AnnuallyRecurringDateInput;
 
-export type RecurringDateData = {
-  frequency: RecurringDateFrequency;
-  startDate: LocalDate;
-};
-
-export function validateRecurringDateInput(data: {
+export function getValidAnchorDate(data: {
   frequency: RecurringDateFrequency;
   startDate?: LocalDate | string | null;
   anniversaryDay?: number | null;
   anniversaryMonth?: number | null;
-}): RecurringDateData {
+}): LocalDate {
   const { frequency, startDate, anniversaryDay, anniversaryMonth } = data;
 
   if (startDate) {
@@ -70,15 +65,11 @@ export function validateRecurringDateInput(data: {
     ) {
       throw new TypeError(`anniversaryDay must be less than or equal to 28`);
     }
-
-    return {
-      frequency,
-      startDate: localStartDate,
-    };
+    return localStartDate;
   }
 
   if (frequency === "daily") {
-    return { frequency, startDate: LocalDate.today() };
+    return LocalDate.today();
   }
 
   if (frequency === "fortnightly") {
@@ -101,7 +92,7 @@ export function validateRecurringDateInput(data: {
       anniversaryMonth % 1 !== 0)
   ) {
     throw new TypeError(
-      `Annually frequency must have integer anniversaryMonth in [1, 12]`
+      `Annual frequency must have integer anniversaryMonth in [1, 12]`
     );
   }
 
@@ -122,8 +113,5 @@ export function validateRecurringDateInput(data: {
           .setDayOfMonth(anniversaryDay)
           .setMonth(anniversaryMonth! - 1);
 
-  return {
-    frequency,
-    startDate: generatedStartDate,
-  };
+  return generatedStartDate;
 }
