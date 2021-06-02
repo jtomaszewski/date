@@ -38,7 +38,7 @@ const frequencyPeriodLength = {
 } as const;
 
 export class RecurringDate {
-  frequency: RecurringDateFrequency;
+  readonly frequency: RecurringDateFrequency;
 
   private anchorDate: LocalDate;
 
