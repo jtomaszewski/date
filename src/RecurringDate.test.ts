@@ -30,8 +30,9 @@ describe("RecurringDate", () => {
       ${5}           | ${null}          | ${null}         | ${"2020-12-26"} | ${"weekly"}      | ${"2021-01-01"} | ${"weekly cycle near end of month asOf Saturday end day Friday"}
       ${6}           | ${null}          | ${null}         | ${"2020-12-26"} | ${"weekly"}      | ${"2021-01-02"} | ${"weekly cycle near end of month asOf Saturday end day Saturday"}
       ${7}           | ${null}          | ${null}         | ${"2020-12-26"} | ${"weekly"}      | ${"2020-12-27"} | ${"weekly cycle near end of month asOf Saturday end day Sunday"}
-      ${null}        | ${null}          | ${"2020-12-26"} | ${"2020-07-15"} | ${"fortnightly"} | ${"2020-12-26"} | ${"fortnightly cycle with start date after asOf should return start date"}
+      ${null}        | ${null}          | ${"2020-08-22"} | ${"2020-07-15"} | ${"fortnightly"} | ${"2020-07-25"} | ${"fortnightly cycle with start date after asOf"}
       ${null}        | ${null}          | ${"2020-07-10"} | ${"2020-07-15"} | ${"fortnightly"} | ${"2020-07-24"} | ${"fortnightly cycle with recent start date"}
+      ${null}        | ${null}          | ${"2020-07-15"} | ${"2020-07-15"} | ${"fortnightly"} | ${"2020-07-29"} | ${"fortnightly cycle asOf start date"}
       ${null}        | ${null}          | ${"2020-04-10"} | ${"2020-07-15"} | ${"fortnightly"} | ${"2020-07-17"} | ${"fortnightly cycle with less recent start date"}
     `(
       "$description",
