@@ -73,17 +73,17 @@ export class RecurringDate {
       return asOf.subtract(period.number, period.unit);
     }
 
-    const periodsToAdd = Math.floor(
-      asOf.diff(this.data.startDate, period.unit, true) / period.number
-    );
+    const periodsToAdd = Math.floor(this.periodsToStartDate(asOf));
     return this.data.startDate.add(periodsToAdd * period.number, period.unit);
   }
 
   hasOccurrenceOn(date: LocalDate = LocalDate.today()): boolean {
+    return Number.isInteger(this.periodsToStartDate(date));
+  }
+
+  private periodsToStartDate(date: LocalDate = LocalDate.today()): number {
     const period = frequencyPeriodLength[this.data.frequency];
-    const periodsToStartDate =
-      date.diff(this.data.startDate, period.unit, true) / period.number;
-    return Number.isInteger(periodsToStartDate);
+    return date.diff(this.data.startDate, period.unit, true) / period.number;
   }
 
   /**
