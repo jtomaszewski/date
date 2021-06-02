@@ -118,7 +118,7 @@ export function validateRecurringDateInput(data: {
       ? LocalDate.today().setDayOfWeek(anniversaryDay)
       : frequency === "monthly"
       ? LocalDate.today().setDayOfMonth(anniversaryDay)
-      : LocalDate.today(frequency)
+      : LocalDate.today()
           .setDayOfMonth(anniversaryDay)
           .setMonth(anniversaryMonth! - 1);
 

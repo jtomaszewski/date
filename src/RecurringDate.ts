@@ -30,6 +30,14 @@ export function formatRecurringDateFrequency(
   }
 }
 
+const frequencyPeriodLength = {
+  daily: { number: 1, unit: "day" },
+  weekly: { number: 1, unit: "week" },
+  fortnightly: { number: 2, unit: "week" },
+  monthly: { number: 1, unit: "month" },
+  annually: { number: 1, unit: "year" },
+} as const;
+
 export class RecurringDate {
   private data: Readonly<RecurringDateData>;
 
@@ -41,28 +49,41 @@ export class RecurringDate {
     return this.data.frequency;
   }
 
-  getNextOccurrence(asOf: LocalDate = LocalDate.today()): LocalDate {
-    if (this.data.frequency === "daily") {
-      return asOf.add(1, "day");
+  getNextOccurrence(
+    asOf: LocalDate = LocalDate.today(),
+    options: { inclusive?: boolean } = {}
+  ): LocalDate {
+    const { inclusive = false } = options;
+    const period = frequencyPeriodLength[this.data.frequency];
+
+    return this.getPreviousOccurrence(asOf, { inclusive: !inclusive }).add(
+      period.number,
+      period.unit
+    );
+  }
+
+  getPreviousOccurrence(
+    asOf: LocalDate = LocalDate.today(),
+    options: { inclusive?: boolean } = {}
+  ): LocalDate {
+    const { inclusive = false } = options;
+    const period = frequencyPeriodLength[this.data.frequency];
+
+    if (!inclusive && this.hasOccurrenceOn(asOf)) {
+      return asOf.subtract(period.number, period.unit);
     }
 
-    const period: { number: number; unit: "week" | "month" | "year" } =
-      this.data.frequency === "weekly"
-        ? { number: 1, unit: "week" }
-        : this.data.frequency === "fortnightly"
-        ? { number: 2, unit: "week" }
-        : this.data.frequency === "monthly"
-        ? { number: 1, unit: "month" }
-        : { number: 1, unit: "year" };
+    const periodsToAdd = Math.floor(
+      asOf.diff(this.data.startDate, period.unit, true) / period.number
+    );
+    return this.data.startDate.add(periodsToAdd * period.number, period.unit);
+  }
 
-    const periodsToPreviousOccurrence =
-      Math.floor(asOf.diff(this.data.startDate, period.unit, true)) -
-      (Math.floor(asOf.diff(this.data.startDate, period.unit, true)) %
-        period.number);
-
-    return this.data.startDate
-      .add(periodsToPreviousOccurrence, period.unit)
-      .add(period.number, period.unit);
+  hasOccurrenceOn(date: LocalDate = LocalDate.today()): boolean {
+    const period = frequencyPeriodLength[this.data.frequency];
+    const periodsToStartDate =
+      date.diff(this.data.startDate, period.unit, true) / period.number;
+    return Number.isInteger(periodsToStartDate);
   }
 
   /**
