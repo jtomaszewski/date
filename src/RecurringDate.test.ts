@@ -20,6 +20,8 @@ describe("RecurringDate", () => {
       ${null}        | ${null}          | ${"2019-01-27"} | ${"2020-04-28"} | ${"monthly"}     | ${false}  | ${"2020-05-27"} | ${"2020-04-27"}  | ${"create monthly cycle from date"}
       ${27}          | ${1}             | ${null}         | ${"2020-05-01"} | ${"annually"}    | ${false}  | ${"2021-01-27"} | ${"2020-01-27"}  | ${"yearly cycle"}
       ${27}          | ${1}             | ${null}         | ${"2021-01-28"} | ${"annually"}    | ${false}  | ${"2022-01-27"} | ${"2021-01-27"}  | ${"asOf at the start of a yearly cycle"}
+      ${27}          | ${1}             | ${null}         | ${"2021-01-27"} | ${"annually"}    | ${true}   | ${"2021-01-27"} | ${"2021-01-27"}  | ${"annual with occurrence on asOf with inclusive"}
+      ${27}          | ${1}             | ${null}         | ${"2021-01-27"} | ${"annually"}    | ${false}  | ${"2022-01-27"} | ${"2020-01-27"}  | ${"annual with occurrence on asOf without inclusive"}
       ${null}        | ${null}          | ${"3000-03-05"} | ${"2021-05-28"} | ${"annually"}    | ${false}  | ${"2022-03-05"} | ${"2021-03-05"}  | ${"create yearly cycle from date"}
       ${3}           | ${null}          | ${null}         | ${"2020-11-01"} | ${"weekly"}      | ${false}  | ${"2020-11-04"} | ${"2020-10-28"}  | ${"weekly cycle asOf Sunday"}
       ${1}           | ${null}          | ${null}         | ${"2020-11-02"} | ${"weekly"}      | ${false}  | ${"2020-11-09"} | ${"2020-10-26"}  | ${"weekly cycle asOf Monday end day Monday"}
