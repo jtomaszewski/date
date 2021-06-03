@@ -181,10 +181,39 @@ describe("LocalDate", () => {
     });
   });
 
+  describe("daysInMonth", () => {
+    it("returns number of days in the month", () => {
+      expect(a.daysInMonth).toEqual(31);
+    });
+  });
+
+  describe("month", () => {
+    it("returns the zero-indexed month", () => {
+      expect(a.month).toEqual(0);
+    });
+  });
+
+  describe("dayOfMonth", () => {
+    it("returns the date of the month", () => {
+      expect(a.dayOfMonth).toEqual(1);
+    });
+  });
+
+  describe("dayOfWeek", () => {
+    it("returns the day of the week, where Monday = 1", () => {
+      expect(a.dayOfWeek).toEqual(3);
+    });
+  });
+
   describe("diff", () => {
     it("if unit arg is not given, returns difference in days between the dates", () => {
       expect(a.diff(b)).toEqual(-366);
       expect(b.diff(a)).toEqual(366);
+    });
+
+    it("if returnDecimal is true, returns decimal", () => {
+      expect(b.diff(a, "week")).toEqual(52);
+      expect(b.diff(a, "week", true)).toEqual(52.285714285714285);
     });
   });
 

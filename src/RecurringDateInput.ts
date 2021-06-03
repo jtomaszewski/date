@@ -1,5 +1,11 @@
 import { LocalDate } from "./LocalDate";
 
+export type RecurringDateFrequency =
+  | "daily"
+  | "weekly"
+  | "fortnightly"
+  | "monthly"
+  | "annually";
 export interface DailyRecurringDateInput {
   frequency: "daily";
 }
@@ -11,9 +17,8 @@ export interface WeeklyRecurringDateInput {
    */
   anniversaryDay: number;
 }
-
-export interface FortnightlyRecurringDateInput {
-  frequency: "fortnightly";
+export interface RecurringDateInputWithStartDate {
+  frequency: RecurringDateFrequency;
   startDate: LocalDate | string;
 }
 
@@ -40,31 +45,37 @@ export interface AnnuallyRecurringDateInput {
 export type RecurringDateInput =
   | DailyRecurringDateInput
   | WeeklyRecurringDateInput
-  | FortnightlyRecurringDateInput
+  | RecurringDateInputWithStartDate
   | MonthlyRecurringDateInput
   | AnnuallyRecurringDateInput;
 
-export type RecurringDateFrequency = RecurringDateInput["frequency"];
-
-export function validateRecurringDateInput(data: {
+export function getValidAnchorDate(data: {
   frequency: RecurringDateFrequency;
   startDate?: LocalDate | string | null;
   anniversaryDay?: number | null;
   anniversaryMonth?: number | null;
-}): RecurringDateInput {
+}): LocalDate {
   const { frequency, startDate, anniversaryDay, anniversaryMonth } = data;
 
-  if (frequency === "fortnightly") {
-    if (!startDate) {
-      throw new TypeError(
-        "Fortnightly recurrences can only be calculated if a start date is provided"
-      );
+  if (startDate) {
+    const localStartDate = LocalDate.from(startDate);
+    if (
+      (frequency === "monthly" || frequency === "annually") &&
+      localStartDate.dayOfMonth > 28
+    ) {
+      throw new TypeError(`anniversaryDay must be less than or equal to 28`);
     }
-    return data as RecurringDateInput;
+    return localStartDate;
   }
 
   if (frequency === "daily") {
-    return data as RecurringDateInput;
+    return LocalDate.today();
+  }
+
+  if (frequency === "fortnightly") {
+    throw new TypeError(
+      "Fortnightly recurrences can only be calculated if a start date is provided"
+    );
   }
 
   if (!anniversaryDay) {
@@ -81,12 +92,8 @@ export function validateRecurringDateInput(data: {
       anniversaryMonth % 1 !== 0)
   ) {
     throw new TypeError(
-      `Annually frequency must have integer anniversaryMonth in [1, 12]`
+      `Annual frequency must have integer anniversaryMonth in [1, 12]`
     );
-  }
-
-  if (anniversaryDay < 1 || anniversaryDay % 1 !== 0) {
-    throw new TypeError(`anniversaryDay must be a positive integer`);
   }
 
   if (frequency === "weekly" && anniversaryDay > 7) {
@@ -97,5 +104,14 @@ export function validateRecurringDateInput(data: {
     throw new TypeError(`anniversaryDay must be less than or equal to 28`);
   }
 
-  return data as RecurringDateInput;
+  const generatedStartDate =
+    frequency === "weekly"
+      ? LocalDate.today().setDayOfWeek(anniversaryDay)
+      : frequency === "monthly"
+      ? LocalDate.today().setDayOfMonth(anniversaryDay)
+      : LocalDate.today()
+          .setDayOfMonth(anniversaryDay)
+          .setMonth(anniversaryMonth! - 1);
+
+  return generatedStartDate;
 }

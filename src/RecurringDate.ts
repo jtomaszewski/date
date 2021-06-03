@@ -4,7 +4,7 @@ import { LocalDate } from "./LocalDate";
 import {
   RecurringDateFrequency,
   RecurringDateInput,
-  validateRecurringDateInput,
+  getValidAnchorDate,
 } from "./RecurringDateInput";
 
 export function formatRecurringDateFrequency(
@@ -29,49 +29,65 @@ export function formatRecurringDateFrequency(
   }
 }
 
+const frequencyPeriodLength = {
+  daily: { number: 1, unit: "day" },
+  weekly: { number: 1, unit: "week" },
+  fortnightly: { number: 2, unit: "week" },
+  monthly: { number: 1, unit: "month" },
+  annually: { number: 1, unit: "year" },
+} as const;
+
 export class RecurringDate {
-  private input: Readonly<RecurringDateInput>;
+  readonly frequency: RecurringDateFrequency;
+
+  private anchorDate: LocalDate;
 
   constructor(input: Readonly<RecurringDateInput>) {
-    validateRecurringDateInput(input);
-    this.input = input;
+    this.anchorDate = getValidAnchorDate(input);
+    this.frequency = input.frequency;
   }
 
-  get frequency(): RecurringDateFrequency {
-    return this.input.frequency;
+  getNextOccurrence(
+    asOf: LocalDate = LocalDate.today(),
+    /**
+     * If `inclusive`, will return provided asOf date if an occurrence falls on that day. Default false.
+     */
+    options: { inclusive?: boolean } = {}
+  ): LocalDate {
+    const { inclusive = false } = options;
+    const period = frequencyPeriodLength[this.frequency];
+
+    return this.getPreviousOccurrence(asOf, { inclusive: !inclusive }).add(
+      period.number,
+      period.unit
+    );
   }
 
-  getNextOccurrence(asOf: LocalDate = LocalDate.today()): LocalDate {
-    if (this.input.frequency === "daily") {
-      return asOf.add(1, "day");
+  getPreviousOccurrence(
+    asOf: LocalDate = LocalDate.today(),
+    /**
+     * If `inclusive`, will return provided asOf date if an occurrence falls on that day. Default false.
+     */
+    options: { inclusive?: boolean } = {}
+  ): LocalDate {
+    const { inclusive = false } = options;
+    const period = frequencyPeriodLength[this.frequency];
+
+    if (!inclusive && this.hasOccurrenceOn(asOf)) {
+      return asOf.subtract(period.number, period.unit);
     }
 
-    let result = asOf;
-    if (this.input.frequency === "fortnightly") {
-      result = LocalDate.from(this.input.startDate);
-    } else if (this.input.frequency === "weekly") {
-      result = result.setDayOfWeek(this.input.anniversaryDay);
-    } else {
-      result = result.setDayOfMonth(this.input.anniversaryDay);
-    }
-    if (this.input.frequency === "annually") {
-      result = result.setMonth(this.input.anniversaryMonth - 1);
-    }
+    const periodsToAdd = Math.floor(this.periodsToStartDate(asOf));
+    return this.anchorDate.add(periodsToAdd * period.number, period.unit);
+  }
 
-    const period: { number: number; unit: "week" | "month" | "year" } =
-      this.input.frequency === "weekly"
-        ? { number: 1, unit: "week" }
-        : this.input.frequency === "fortnightly"
-        ? { number: 2, unit: "week" }
-        : this.input.frequency === "monthly"
-        ? { number: 1, unit: "month" }
-        : { number: 1, unit: "year" };
+  hasOccurrenceOn(date: LocalDate = LocalDate.today()): boolean {
+    return Number.isInteger(this.periodsToStartDate(date));
+  }
 
-    while (result.isSameOrBefore(asOf)) {
-      result = result.add(period.number, period.unit);
-    }
-
-    return result;
+  private periodsToStartDate(date: LocalDate = LocalDate.today()): number {
+    const period = frequencyPeriodLength[this.frequency];
+    return date.diff(this.anchorDate, period.unit, true) / period.number;
   }
 
   /**
@@ -123,29 +139,29 @@ export class RecurringDate {
   format({ type = "X of Y" }: { type?: "X of Y" | "/FF" } = {}): string {
     if (type === "X of Y") {
       // eslint-disable-next-line default-case
-      switch (this.input.frequency) {
+      switch (this.frequency) {
         case "daily":
           return "Every day";
 
         case "fortnightly":
           return `Fortnightly starting with ${LocalDate.from(
-            this.input.startDate
+            this.anchorDate
           ).format("D MMM YYYY")}`;
 
         case "weekly":
           return `${moment()
-            .isoWeekday(this.input.anniversaryDay)
+            .isoWeekday(this.anchorDate.dayOfWeek)
             .format("dddd")} each week`;
 
         case "monthly":
           return `${moment()
-            .date(this.input.anniversaryDay)
+            .date(this.anchorDate.dayOfMonth)
             .format("Do")} of each month`;
 
         case "annually":
           return `${moment()
-            .date(this.input.anniversaryDay)
-            .month(this.input.anniversaryMonth - 1)
+            .date(this.anchorDate.dayOfMonth)
+            .month(this.anchorDate.month)
             .format("Do MMMM")} each year`;
       }
     }

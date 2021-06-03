@@ -253,6 +253,22 @@ export class LocalDate {
     return a.isBefore(b) ? -1 : a.isAfter(b) ? 1 : 0;
   }
 
+  get daysInMonth(): number {
+    return this.moment.daysInMonth();
+  }
+
+  get month(): number {
+    return this.moment.month();
+  }
+
+  get dayOfMonth(): number {
+    return this.moment.date();
+  }
+
+  get dayOfWeek(): number {
+    return this.moment.isoWeekday();
+  }
+
   setMonth(month: number): LocalDate {
     return new LocalDate(
       this.moment.clone().month(month).format(localDateValueFormat)
@@ -283,8 +299,12 @@ export class LocalDate {
     );
   }
 
-  diff(otherDate: LocalDate, unit: LocalDateUnit = "day"): number {
-    return this.moment.clone().diff(otherDate.moment, unit);
+  diff(
+    otherDate: LocalDate,
+    unit: LocalDateUnit = "day",
+    returnDecimal?: boolean
+  ): number {
+    return this.moment.clone().diff(otherDate.moment, unit, returnDecimal);
   }
 
   isBefore(date: LocalDate): boolean {
