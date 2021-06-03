@@ -182,7 +182,7 @@ describe("LocalDate", () => {
   });
 
   describe("daysInMonth", () => {
-    it("returns the zero-indexed month", () => {
+    it("returns number of days in the month", () => {
       expect(a.daysInMonth).toEqual(31);
     });
   });
