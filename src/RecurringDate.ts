@@ -49,10 +49,13 @@ export class RecurringDate {
 
   getNextOccurrence(
     asOf: LocalDate = LocalDate.today(),
-    /**
-     * If `inclusive`, will return provided asOf date if an occurrence falls on that day. Default false.
-     */
-    options: { inclusive?: boolean } = {}
+    options: {
+      /**
+       * If true, will return provided `asOf` date if an occurrence falls on that day.
+       * @default false
+       */
+      inclusive?: boolean;
+    } = {}
   ): LocalDate {
     const { inclusive = false } = options;
     const period = frequencyPeriodLength[this.frequency];
@@ -65,10 +68,14 @@ export class RecurringDate {
 
   getPreviousOccurrence(
     asOf: LocalDate = LocalDate.today(),
-    /**
-     * If `inclusive`, will return provided asOf date if an occurrence falls on that day. Default false.
-     */
-    options: { inclusive?: boolean } = {}
+
+    options: {
+      /**
+       * If true, will return provided `asOf` date if an occurrence falls on that day.
+       * @default false
+       */
+      inclusive?: boolean;
+    } = {}
   ): LocalDate {
     const { inclusive = false } = options;
     const period = frequencyPeriodLength[this.frequency];
