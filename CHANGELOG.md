@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.8.2](https://github.com/ailohq/date/compare/v2.8.1...v2.8.2) (2021-06-03)
+
 ### [2.8.1](https://github.com/ailohq/date/compare/v2.8.0...v2.8.1) (2021-06-03)
 
 ## [2.8.0](https://github.com/ailohq/date/compare/v2.5.4...v2.8.0) (2021-06-03)
