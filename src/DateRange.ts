@@ -9,8 +9,15 @@ export class EndDateMustBeOnOrAfterStartDateError extends Error {
 }
 
 export class DateRange {
-  constructor(readonly start: LocalDate, readonly end?: LocalDate) {
-    if (end?.isBefore(start)) {
+  readonly start: LocalDate;
+
+  private readonly startDateProvided: boolean;
+
+  constructor(start?: LocalDate, readonly end?: LocalDate) {
+    this.startDateProvided = !!start;
+    this.start = start ?? LocalDate.MIN_DATE;
+
+    if (end?.isBefore(this.start)) {
       throw new EndDateMustBeOnOrAfterStartDateError();
     }
   }
@@ -68,9 +75,12 @@ export class DateRange {
 
   format({ dateFormat }: { dateFormat?: LocalDateFormat } = {}): string {
     if (this.end) {
-      return `${this.start.format(dateFormat)} – ${this.end.format(
-        dateFormat
-      )}`;
+      if (this.startDateProvided) {
+        return `${this.start.format(dateFormat)} – ${this.end.format(
+          dateFormat
+        )}`;
+      }
+      return `To ${this.end.format(dateFormat)}`;
     }
 
     return `From ${this.start.format(dateFormat)}`;

@@ -45,6 +45,10 @@ function convertNumberToTwoDigits(number: number): string {
 }
 
 export class LocalDate {
+  static readonly MIN_DATE = new LocalDate("0000-01-01");
+
+  static readonly MAX_DATE = new LocalDate("9999-12-31");
+
   constructor(readonly value: string) {
     if (!/^\d{4}-\d{2}-\d{2}$/.exec(value)) {
       throw new TypeError(`Invalid LocalDate constructor value: ${value}`);
