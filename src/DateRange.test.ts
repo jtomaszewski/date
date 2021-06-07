@@ -8,6 +8,28 @@ describe("DateRange", () => {
   const a = new LocalDate("2000-01-01");
   const b = new LocalDate("2000-01-31");
 
+  const fromYesterdayToYesterday = new DateRange(
+    LocalDate.yesterday(),
+    LocalDate.yesterday()
+  );
+  const fromYesterdayToToday = new DateRange(
+    LocalDate.yesterday(),
+    LocalDate.today()
+  );
+  const fromYesterdayToTomorrow = new DateRange(
+    LocalDate.yesterday(),
+    LocalDate.tomorrow()
+  );
+  const fromTodayToToday = new DateRange(LocalDate.today(), LocalDate.today());
+  const fromTodayToTomorrow = new DateRange(
+    LocalDate.today(),
+    LocalDate.tomorrow()
+  );
+  const fromTomorrowToTomorrow = new DateRange(
+    LocalDate.tomorrow(),
+    LocalDate.tomorrow()
+  );
+
   describe(".constructor", () => {
     it("if called with correct two args, returns date range", () => {
       expect(new DateRange(a, b)).toMatchObject({
@@ -36,106 +58,40 @@ describe("DateRange", () => {
     });
   });
 
-  it(".getCurrentness returns currentness", () => {
-    expect(
-      new DateRange(
-        LocalDate.yesterday(),
-        LocalDate.yesterday()
-      ).getCurrentness()
-    ).toEqual("past");
-    expect(
-      new DateRange(LocalDate.yesterday(), LocalDate.today()).getCurrentness()
-    ).toEqual("current");
-    expect(
-      new DateRange(
-        LocalDate.yesterday(),
-        LocalDate.tomorrow()
-      ).getCurrentness()
-    ).toEqual("current");
-    expect(
-      new DateRange(LocalDate.today(), LocalDate.today()).getCurrentness()
-    ).toEqual("current");
-    expect(
-      new DateRange(LocalDate.today(), LocalDate.tomorrow()).getCurrentness()
-    ).toEqual("current");
-    expect(
-      new DateRange(LocalDate.tomorrow(), LocalDate.tomorrow()).getCurrentness()
-    ).toEqual("future");
+  it(".getCurrentness returns currentness relative to today", () => {
+    expect(fromYesterdayToYesterday.getCurrentness()).toEqual("past");
+    expect(fromYesterdayToToday.getCurrentness()).toEqual("current");
+    expect(fromYesterdayToTomorrow.getCurrentness()).toEqual("current");
+    expect(fromTodayToToday.getCurrentness()).toEqual("current");
+    expect(fromTodayToTomorrow.getCurrentness()).toEqual("current");
+    expect(fromTomorrowToTomorrow.getCurrentness()).toEqual("future");
   });
 
   it(".isBefore returns true if date range is in the past", () => {
-    expect(
-      new DateRange(LocalDate.yesterday(), LocalDate.yesterday()).isBefore()
-    ).toEqual(true);
-    expect(
-      new DateRange(LocalDate.yesterday(), LocalDate.today()).isBefore()
-    ).toEqual(false);
-    expect(
-      new DateRange(LocalDate.yesterday(), LocalDate.tomorrow()).isBefore()
-    ).toEqual(false);
-    expect(
-      new DateRange(LocalDate.today(), LocalDate.today()).isBefore()
-    ).toEqual(false);
-    expect(
-      new DateRange(LocalDate.today(), LocalDate.tomorrow()).isBefore()
-    ).toEqual(false);
-    expect(
-      new DateRange(LocalDate.tomorrow(), LocalDate.tomorrow()).isBefore()
-    ).toEqual(false);
+    expect(fromYesterdayToYesterday.isBefore()).toEqual(true);
+    expect(fromYesterdayToToday.isBefore()).toEqual(false);
+    expect(fromYesterdayToTomorrow.isBefore()).toEqual(false);
+    expect(fromTodayToToday.isBefore()).toEqual(false);
+    expect(fromTodayToTomorrow.isBefore()).toEqual(false);
+    expect(fromTomorrowToTomorrow.isBefore()).toEqual(false);
   });
 
   it(".contains returns true if date range is currently ongoing", () => {
-    expect(
-      new DateRange(LocalDate.yesterday(), LocalDate.yesterday()).contains(
-        LocalDate.today()
-      )
-    ).toEqual(false);
-    expect(
-      new DateRange(LocalDate.yesterday(), LocalDate.today()).contains(
-        LocalDate.today()
-      )
-    ).toEqual(true);
-    expect(
-      new DateRange(LocalDate.yesterday(), LocalDate.tomorrow()).contains(
-        LocalDate.today()
-      )
-    ).toEqual(true);
-    expect(
-      new DateRange(LocalDate.today(), LocalDate.today()).contains(
-        LocalDate.today()
-      )
-    ).toEqual(true);
-    expect(
-      new DateRange(LocalDate.today(), LocalDate.tomorrow()).contains(
-        LocalDate.today()
-      )
-    ).toEqual(true);
-    expect(
-      new DateRange(LocalDate.tomorrow(), LocalDate.tomorrow()).contains(
-        LocalDate.today()
-      )
-    ).toEqual(false);
+    expect(fromYesterdayToYesterday.contains(LocalDate.today())).toEqual(false);
+    expect(fromYesterdayToToday.contains(LocalDate.today())).toEqual(true);
+    expect(fromYesterdayToTomorrow.contains(LocalDate.today())).toEqual(true);
+    expect(fromTodayToToday.contains(LocalDate.today())).toEqual(true);
+    expect(fromTodayToTomorrow.contains(LocalDate.today())).toEqual(true);
+    expect(fromTomorrowToTomorrow.contains(LocalDate.today())).toEqual(false);
   });
 
   it(".isAfter returns true if date range is in the past", () => {
-    expect(
-      new DateRange(LocalDate.yesterday(), LocalDate.yesterday()).isAfter()
-    ).toEqual(false);
-    expect(
-      new DateRange(LocalDate.yesterday(), LocalDate.today()).isAfter()
-    ).toEqual(false);
-    expect(
-      new DateRange(LocalDate.yesterday(), LocalDate.tomorrow()).isAfter()
-    ).toEqual(false);
-    expect(
-      new DateRange(LocalDate.today(), LocalDate.today()).isAfter()
-    ).toEqual(false);
-    expect(
-      new DateRange(LocalDate.today(), LocalDate.tomorrow()).isAfter()
-    ).toEqual(false);
-    expect(
-      new DateRange(LocalDate.tomorrow(), LocalDate.tomorrow()).isAfter()
-    ).toEqual(true);
+    expect(fromYesterdayToYesterday.isAfter()).toEqual(false);
+    expect(fromYesterdayToToday.isAfter()).toEqual(false);
+    expect(fromYesterdayToTomorrow.isAfter()).toEqual(false);
+    expect(fromTodayToToday.isAfter()).toEqual(false);
+    expect(fromTodayToTomorrow.isAfter()).toEqual(false);
+    expect(fromTomorrowToTomorrow.isAfter()).toEqual(true);
   });
 
   describe(".format", () => {
