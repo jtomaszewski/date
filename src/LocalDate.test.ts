@@ -246,4 +246,38 @@ describe("LocalDate", () => {
       "Apr 01 2021"
     );
   });
+
+  describe("MIN_DATE and MAX_DATE", () => {
+    it("can handle the dates correctly", () => {
+      expect(LocalDate.from("0000-01-01").toString()).toEqual("0000-01-01");
+      expect(LocalDate.from("9999-12-31").toString()).toEqual("9999-12-31");
+
+      expect(LocalDate.from(LocalDate.MIN_DATE).toString()).toEqual(
+        "0000-01-01"
+      );
+      expect(LocalDate.from(LocalDate.MAX_DATE).toString()).toEqual(
+        "9999-12-31"
+      );
+
+      expect(LocalDate.min(LocalDate.MIN_DATE, a)).toEqual(LocalDate.MIN_DATE);
+      expect(LocalDate.min(a, LocalDate.MIN_DATE)).toEqual(LocalDate.MIN_DATE);
+
+      expect(LocalDate.min(LocalDate.MAX_DATE, a)).toEqual(a);
+      expect(LocalDate.min(a, LocalDate.MAX_DATE)).toEqual(a);
+
+      expect(LocalDate.max(LocalDate.MIN_DATE, a)).toEqual(a);
+      expect(LocalDate.max(a, LocalDate.MIN_DATE, a)).toEqual(a);
+
+      expect(LocalDate.max(LocalDate.MAX_DATE, a)).toEqual(LocalDate.MAX_DATE);
+      expect(LocalDate.max(a, LocalDate.MAX_DATE)).toEqual(LocalDate.MAX_DATE);
+
+      expect(LocalDate.MIN_DATE.add(1, "d").toString()).toEqual("0000-01-02");
+      expect(LocalDate.MAX_DATE.subtract(1, "d").toString()).toEqual(
+        "9999-12-30"
+      );
+
+      expect(LocalDate.MIN_DATE.diff(LocalDate.MAX_DATE, "y")).toEqual(-9999);
+      expect(LocalDate.MAX_DATE.diff(LocalDate.MIN_DATE, "y")).toEqual(9999);
+    });
+  });
 });
