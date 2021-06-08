@@ -8,43 +8,14 @@ describe("DateRange", () => {
   const a = new LocalDate("2000-01-01");
   const b = new LocalDate("2000-01-31");
 
-  const fromYesterdayToYesterday = new DateRange(
-    LocalDate.yesterday(),
-    LocalDate.yesterday()
-  );
-  const fromYesterdayToToday = new DateRange(
-    LocalDate.yesterday(),
-    LocalDate.today()
-  );
-  const fromYesterdayToTomorrow = new DateRange(
-    LocalDate.yesterday(),
-    LocalDate.tomorrow()
-  );
-  const fromTodayToToday = new DateRange(LocalDate.today(), LocalDate.today());
-  const fromTodayToTomorrow = new DateRange(
-    LocalDate.today(),
-    LocalDate.tomorrow()
-  );
-  const fromTomorrowToTomorrow = new DateRange(
-    LocalDate.tomorrow(),
-    LocalDate.tomorrow()
-  );
+  const days: { [key: string]: LocalDate | undefined } = {
+    yesterday: LocalDate.yesterday(),
+    today: LocalDate.today(),
+    tomorrow: LocalDate.tomorrow(),
+    infinity: undefined,
+  };
 
-  const fromInfinityToYesterday = new DateRange(
-    undefined,
-    LocalDate.yesterday()
-  );
-  const fromInfinityToToday = new DateRange(undefined, LocalDate.today());
-  const fromInfinityToTomorrow = new DateRange(undefined, LocalDate.tomorrow());
-
-  const fromYesterdayToInfinity = new DateRange(
-    LocalDate.yesterday(),
-    undefined
-  );
-  const fromTodayToInfinity = new DateRange(LocalDate.today(), undefined);
-  const fromTomorrowToInfinity = new DateRange(LocalDate.tomorrow(), undefined);
-
-  describe(".constructor", () => {
+  describe("constructor", () => {
     it("if called with correct two args, returns date range", () => {
       expect(new DateRange(a, b)).toMatchObject({
         start: a,
@@ -59,7 +30,7 @@ describe("DateRange", () => {
     });
   });
 
-  describe(".from", () => {
+  describe("from", () => {
     it("if called with correct two args, returns date range", () => {
       expect(DateRange.from(a, b)).toMatchObject({
         start: a,
@@ -72,65 +43,111 @@ describe("DateRange", () => {
     });
   });
 
-  it(".getCurrentness returns currentness", () => {
-    expect(fromYesterdayToYesterday.getCurrentness()).toEqual("past");
-    expect(fromYesterdayToToday.getCurrentness()).toEqual("current");
-    expect(fromYesterdayToTomorrow.getCurrentness()).toEqual("current");
-    expect(fromTodayToToday.getCurrentness()).toEqual("current");
-    expect(fromTodayToTomorrow.getCurrentness()).toEqual("current");
-    expect(fromTomorrowToTomorrow.getCurrentness()).toEqual("future");
-
-    expect(fromInfinityToYesterday.getCurrentness()).toEqual("past");
-    expect(fromInfinityToToday.getCurrentness()).toEqual("current");
-    expect(fromInfinityToTomorrow.getCurrentness()).toEqual("current");
-
-    expect(fromYesterdayToInfinity.getCurrentness()).toEqual("current");
-    expect(fromTodayToInfinity.getCurrentness()).toEqual("current");
-    expect(fromTomorrowToInfinity.getCurrentness()).toEqual("future");
+  describe("getCurrentness", () => {
+    describe.each`
+      start          | end            | expected
+      ${"yesterday"} | ${"yesterday"} | ${"past"}
+      ${"yesterday"} | ${"today"}     | ${"current"}
+      ${"yesterday"} | ${"tomorrow"}  | ${"current"}
+      ${"today"}     | ${"today"}     | ${"current"}
+      ${"today"}     | ${"tomorrow"}  | ${"current"}
+      ${"tomorrow"}  | ${"tomorrow"}  | ${"future"}
+      ${"infinity"}  | ${"yesterday"} | ${"past"}
+      ${"infinity"}  | ${"today"}     | ${"current"}
+      ${"infinity"}  | ${"tomorrow"}  | ${"current"}
+      ${"yesterday"} | ${"infinity"}  | ${"current"}
+      ${"today"}     | ${"infinity"}  | ${"current"}
+      ${"tomorrow"}  | ${"infinity"}  | ${"future"}
+    `("from $start to $end", ({ start, end, expected }) => {
+      it("returns currentness", () => {
+        expect(new DateRange(days[start], days[end]).getCurrentness()).toEqual(
+          expected
+        );
+      });
+    });
   });
 
-  it(".isBefore returns true if date range is in the past", () => {
-    expect(fromYesterdayToYesterday.isBefore()).toEqual(true);
-    expect(fromYesterdayToToday.isBefore()).toEqual(false);
-    expect(fromYesterdayToTomorrow.isBefore()).toEqual(false);
-    expect(fromTodayToToday.isBefore()).toEqual(false);
-    expect(fromTodayToTomorrow.isBefore()).toEqual(false);
-    expect(fromTomorrowToTomorrow.isBefore()).toEqual(false);
-
-    expect(fromInfinityToYesterday.isBefore()).toEqual(true);
-    expect(fromInfinityToToday.isBefore()).toEqual(false);
-    expect(fromInfinityToTomorrow.isBefore()).toEqual(false);
-
-    expect(fromYesterdayToInfinity.isBefore()).toEqual(false);
-    expect(fromTodayToInfinity.isBefore()).toEqual(false);
-    expect(fromTomorrowToInfinity.isBefore()).toEqual(false);
+  describe("isBefore", () => {
+    describe.each`
+      start          | end            | expected
+      ${"yesterday"} | ${"yesterday"} | ${true}
+      ${"yesterday"} | ${"today"}     | ${false}
+      ${"yesterday"} | ${"tomorrow"}  | ${false}
+      ${"today"}     | ${"today"}     | ${false}
+      ${"today"}     | ${"tomorrow"}  | ${false}
+      ${"tomorrow"}  | ${"tomorrow"}  | ${false}
+      ${"infinity"}  | ${"yesterday"} | ${true}
+      ${"infinity"}  | ${"today"}     | ${false}
+      ${"infinity"}  | ${"tomorrow"}  | ${false}
+      ${"yesterday"} | ${"infinity"}  | ${false}
+      ${"today"}     | ${"infinity"}  | ${false}
+      ${"tomorrow"}  | ${"infinity"}  | ${false}
+    `("from $start to $end", ({ start, end, expected }) => {
+      it("returns true if date range is in the past", () => {
+        expect(new DateRange(days[start], days[end]).isBefore()).toEqual(
+          expected
+        );
+      });
+    });
   });
 
-  it(".contains returns true if date range is currently ongoing", () => {
-    expect(fromYesterdayToYesterday.contains(LocalDate.today())).toEqual(false);
-    expect(fromYesterdayToToday.contains(LocalDate.today())).toEqual(true);
-    expect(fromYesterdayToTomorrow.contains(LocalDate.today())).toEqual(true);
-    expect(fromTodayToToday.contains(LocalDate.today())).toEqual(true);
-    expect(fromTodayToTomorrow.contains(LocalDate.today())).toEqual(true);
-    expect(fromTomorrowToTomorrow.contains(LocalDate.today())).toEqual(false);
+  describe("contains", () => {
+    describe.each`
+      start          | end            | expected
+      ${"yesterday"} | ${"yesterday"} | ${false}
+      ${"yesterday"} | ${"today"}     | ${true}
+      ${"yesterday"} | ${"tomorrow"}  | ${true}
+      ${"today"}     | ${"today"}     | ${true}
+      ${"today"}     | ${"tomorrow"}  | ${true}
+      ${"tomorrow"}  | ${"tomorrow"}  | ${false}
+      ${"infinity"}  | ${"yesterday"} | ${false}
+      ${"infinity"}  | ${"tomorrow"}  | ${true}
+      ${"yesterday"} | ${"infinity"}  | ${true}
+      ${"today"}     | ${"infinity"}  | ${true}
+      ${"tomorrow"}  | ${"infinity"}  | ${false}
+    `("from $start to $end", ({ start, end, expected }) => {
+      it("returns true if date range is currently ongoing", () => {
+        expect(
+          new DateRange(days[start], days[end]).contains(LocalDate.today())
+        ).toEqual(expected);
+      });
+    });
   });
 
-  it(".isAfter returns true if date range is in the past", () => {
-    expect(fromYesterdayToYesterday.isAfter()).toEqual(false);
-    expect(fromYesterdayToToday.isAfter()).toEqual(false);
-    expect(fromYesterdayToTomorrow.isAfter()).toEqual(false);
-    expect(fromTodayToToday.isAfter()).toEqual(false);
-    expect(fromTodayToTomorrow.isAfter()).toEqual(false);
-    expect(fromTomorrowToTomorrow.isAfter()).toEqual(true);
+  describe("isAfter", () => {
+    describe.each`
+      start          | end            | expected
+      ${"yesterday"} | ${"yesterday"} | ${false}
+      ${"yesterday"} | ${"today"}     | ${false}
+      ${"yesterday"} | ${"tomorrow"}  | ${false}
+      ${"today"}     | ${"today"}     | ${false}
+      ${"today"}     | ${"tomorrow"}  | ${false}
+      ${"tomorrow"}  | ${"tomorrow"}  | ${true}
+      ${"infinity"}  | ${"yesterday"} | ${false}
+      ${"infinity"}  | ${"tomorrow"}  | ${false}
+      ${"yesterday"} | ${"infinity"}  | ${false}
+      ${"today"}     | ${"infinity"}  | ${false}
+      ${"tomorrow"}  | ${"infinity"}  | ${true}
+    `("from $start to $end", ({ start, end, expected }) => {
+      it("returns true if date range is in the past", () => {
+        expect(new DateRange(days[start], days[end]).isAfter()).toEqual(
+          expected
+        );
+      });
+    });
   });
 
-  describe(".format", () => {
+  describe("format", () => {
     it("if end date is specified, returns formatted date range", () => {
       expect(new DateRange(a, b).format()).toEqual("2000-01-01 – 2000-01-31");
     });
 
     it('if end date isn\'t specified, returns formatted "From: START_DATE"', () => {
       expect(new DateRange(a).format()).toEqual("From 2000-01-01");
+    });
+
+    it('if start date isn\'t specified, returns formatted "To: START_DATE"', () => {
+      expect(new DateRange(undefined, a).format()).toEqual("To 2000-01-01");
     });
   });
 
