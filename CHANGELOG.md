@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.9.0](https://github.com/ailohq/date/compare/v2.8.4...v2.9.0) (2021-06-22)
+
+
+### Features
+
+* add toEqual to LocalDate ([38dfd7d](https://github.com/ailohq/date/commit/38dfd7dca0351df5df3dbf8b51bf0db86be9bbd5))
+
 ### [2.8.4](https://github.com/ailohq/date/compare/v2.8.3...v2.8.4) (2021-06-22)
 
 ### [2.8.3](https://github.com/ailohq/date/compare/v2.8.2...v2.8.3) (2021-06-03)
