@@ -46,7 +46,7 @@ function convertNumberToTwoDigits(number: number): string {
 
 export class LocalDate {
   constructor(readonly value: string) {
-    if (!/^\d{4}-\d{2}-\d{2}$/.exec(value)) {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) {
       throw new TypeError(`Invalid LocalDate constructor value: ${value}`);
     }
   }
@@ -165,23 +165,23 @@ export class LocalDate {
     // Prefer European/Australian format over American
     // (DD/MM instead of MM/DD)
     try {
-      if (string.match(/^\d{1,2}\s*[ ./;_-]?$/)) {
+      if (/^\d{1,2}\s*[ ./;_-]?$/.test(string)) {
         return this.fromMoment(moment(string, "DD"));
       }
-      if (string.match(/^\d{1,2}\s*[ ./;_-]\s*\d{1,2}\s*[ ./;_-]?$/)) {
+      if (/^\d{1,2}\s*[ ./;_-]\s*\d{1,2}\s*[ ./;_-]?$/.test(string)) {
         return this.fromMoment(moment(string, "DD.MM"));
       }
-      if (string.match(/^(?:\d{1,2}\s*[ ./;_-]\s*){2}\d$/)) {
+      if (/^(?:\d{1,2}\s*[ ./;_-]\s*){2}\d$/.test(string)) {
         return this.fromMoment(
           moment(`${string.slice(0, -1)}200${string.slice(-1)}`, "DD/MM/YYYY")
         );
       }
-      if (string.match(/^(?:\d{1,2}\s*[ ./;_-]\s*){2}\d{3}$/)) {
+      if (/^(?:\d{1,2}\s*[ ./;_-]\s*){2}\d{3}$/.test(string)) {
         return this.fromMoment(
           moment(`${string.slice(0, -3)}2${string.slice(-3)}`, "DD/MM/YYYY")
         );
       }
-      if (string.match(/^(?:\d{1,2}\s*[ ./;_-]\s*){2}\d{2,4}$/)) {
+      if (/^(?:\d{1,2}\s*[ ./;_-]\s*){2}\d{2,4}$/.test(string)) {
         return this.fromMoment(moment(string, "DD/MM/YYYY"));
       }
     } catch {
@@ -345,5 +345,9 @@ export class LocalDate {
       this.moment.date()
     );
     return date;
+  }
+
+  toPostgres(): string {
+    return this.toString();
   }
 }

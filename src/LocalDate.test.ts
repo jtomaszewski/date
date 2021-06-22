@@ -168,9 +168,9 @@ describe("LocalDate", () => {
         ["25", "2020-09-25"],
       ];
 
-      pairs.forEach((pair) => {
+      for (const pair of pairs) {
         expect([pair[0], LocalDate.parse(pair[0])?.toString()]).toEqual(pair);
-      });
+      }
     });
   });
 
@@ -213,7 +213,7 @@ describe("LocalDate", () => {
 
     it("if returnDecimal is true, returns decimal", () => {
       expect(b.diff(a, "week")).toEqual(52);
-      expect(b.diff(a, "week", true)).toEqual(52.285714285714285);
+      expect(b.diff(a, "week", true)).toEqual(52.285_714_285_714_285);
     });
   });
 
