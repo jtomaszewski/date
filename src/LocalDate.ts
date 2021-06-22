@@ -51,17 +51,17 @@ export class LocalDate {
     }
   }
 
-  private _moment?: moment.Moment;
+  #moment?: moment.Moment;
 
   private get moment(): moment.Moment {
-    if (!this._moment) {
-      this._moment = moment.tz(
+    if (!this.#moment) {
+      this.#moment = moment.tz(
         this.value,
         localDateValueFormat,
         DefaultTimeZoneRef.current
       );
     }
-    return this._moment;
+    return this.#moment.clone();
   }
 
   static from(
