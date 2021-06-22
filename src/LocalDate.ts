@@ -347,6 +347,11 @@ export class LocalDate {
     return date;
   }
 
+  toEqual(other: unknown): boolean {
+    if (other instanceof LocalDate) return LocalDate.compare(this, other) === 0;
+    return false;
+  }
+
   toPostgres(): string {
     return this.toString();
   }

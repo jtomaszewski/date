@@ -181,6 +181,20 @@ describe("LocalDate", () => {
     });
   });
 
+  describe(".toEqual", () => {
+    it("checks LocalDates with same date are equal", () => {
+      expect(a.toEqual(new LocalDate(a.value))).toBe(true);
+    });
+
+    it("checks LocalDates with different dates are not equal", () => {
+      expect(a.toEqual(b)).toBe(false);
+    });
+
+    it("checks other types of values are not equal", () => {
+      expect(a.toEqual(a.value)).toBe(false);
+    });
+  });
+
   describe("daysInMonth", () => {
     it("returns number of days in the month", () => {
       expect(a.daysInMonth).toEqual(31);
