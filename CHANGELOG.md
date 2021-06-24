@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.10.0](https://github.com/ailohq/date/compare/v2.9.0...v2.10.0) (2021-06-24)
+
+
+### Features
+
+* Add LocalDate serialization class methods ([e05c7de](https://github.com/ailohq/date/commit/e05c7de3a8be0922be920ec3f92f757539320503))
+
 ## [2.9.0](https://github.com/ailohq/date/compare/v2.8.4...v2.9.0) (2021-06-22)
 
 
