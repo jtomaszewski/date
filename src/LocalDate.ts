@@ -334,7 +334,7 @@ export class LocalDate {
   }
 
   toString(): string {
-    return this.format(localDateValueFormat);
+    return this.value;
   }
 
   toDate(): Date {
@@ -353,6 +353,14 @@ export class LocalDate {
   }
 
   toPostgres(): string {
-    return this.toString();
+    return this.value;
+  }
+
+  valueOf(): string {
+    return this.value;
+  }
+
+  toJSON(): string {
+    return this.value;
   }
 }
