@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.11.0](https://github.com/ailohq/date/compare/v2.10.0...v2.11.0) (2021-08-11)
+
+
+### Features
+
+* **RecurringDate:** Add `/FFFF` format ([bed4571](https://github.com/ailohq/date/commit/bed4571d71d55a6f43ddf396500da69b3716408e))
+
 ## [2.10.0](https://github.com/ailohq/date/compare/v2.9.0...v2.10.0) (2021-06-24)
 
 
