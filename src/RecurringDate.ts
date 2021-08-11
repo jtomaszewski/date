@@ -9,24 +9,50 @@ import {
 
 export function formatRecurringDateFrequency(
   frequency: RecurringDateFrequency,
-  _opts: {
-    type?: "/FF";
+  opts: {
+    /**
+     * @default "/FF"
+     */
+    type?: "/FF" | "/FFFF";
   } = {}
 ): string {
-  switch (frequency) {
-    case "daily":
-      return "/day";
-    case "weekly":
-      return "/wk";
-    case "fortnightly":
-      return "/fn";
-    case "monthly":
-      return "/mo";
-    case "annually":
-      return "/yr";
-    default:
-      throw new TypeError(`Unknown frequency: ${frequency}`);
+  const type = opts.type ?? "/FF";
+
+  if (type === "/FF") {
+    switch (frequency) {
+      case "daily":
+        return "/day";
+      case "weekly":
+        return "/wk";
+      case "fortnightly":
+        return "/fn";
+      case "monthly":
+        return "/mo";
+      case "annually":
+        return "/yr";
+      default:
+        throw new TypeError(`Unknown frequency: ${frequency}`);
+    }
   }
+
+  if (type === "/FFFF") {
+    switch (frequency) {
+      case "daily":
+        return "/day";
+      case "weekly":
+        return "/week";
+      case "fortnightly":
+        return "/fortnight";
+      case "monthly":
+        return "/month";
+      case "annually":
+        return "/year";
+      default:
+        throw new TypeError(`Unknown frequency: ${frequency}`);
+    }
+  }
+
+  throw new TypeError(`Unknown type: ${type}`);
 }
 
 const frequencyPeriodLength = {
@@ -175,24 +201,8 @@ export class RecurringDate {
       }
     }
 
-    if (type === "/FF") {
-      return formatRecurringDateFrequency(this.frequency);
-    }
-
-    if (type === "/FFFF") {
-      // eslint-disable-next-line default-case
-      switch (this.frequency) {
-        case "daily":
-          return "/day";
-        case "weekly":
-          return "/week";
-        case "fortnightly":
-          return "/fortnight";
-        case "monthly":
-          return "/month";
-        case "annually":
-          return "/year";
-      }
+    if (type === "/FF" || type === "/FFFF") {
+      return formatRecurringDateFrequency(this.frequency, { type });
     }
 
     throw new TypeError(
