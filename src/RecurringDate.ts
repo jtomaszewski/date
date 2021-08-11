@@ -143,7 +143,9 @@ export class RecurringDate {
     return result;
   }
 
-  format({ type = "X of Y" }: { type?: "X of Y" | "/FF" } = {}): string {
+  format({
+    type = "X of Y",
+  }: { type?: "X of Y" | "/FF" | "/FFFF" } = {}): string {
     if (type === "X of Y") {
       // eslint-disable-next-line default-case
       switch (this.frequency) {
@@ -175,6 +177,22 @@ export class RecurringDate {
 
     if (type === "/FF") {
       return formatRecurringDateFrequency(this.frequency);
+    }
+
+    if (type === "/FFFF") {
+      // eslint-disable-next-line default-case
+      switch (this.frequency) {
+        case "daily":
+          return "/day";
+        case "weekly":
+          return "/week";
+        case "fortnightly":
+          return "/fortnight";
+        case "monthly":
+          return "/month";
+        case "annually":
+          return "/year";
+      }
     }
 
     throw new TypeError(
