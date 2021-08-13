@@ -73,6 +73,10 @@ export class RecurringDate {
     this.frequency = input.frequency;
   }
 
+  private get period() {
+    return frequencyPeriodLength[this.frequency];
+  }
+
   getNextOccurrence(
     asOf: LocalDate = LocalDate.today(),
     options: {
@@ -84,14 +88,16 @@ export class RecurringDate {
     } = {}
   ): LocalDate {
     const { inclusive = false } = options;
-    const period = frequencyPeriodLength[this.frequency];
 
     if (inclusive && this.hasOccurrenceOn(asOf)) {
       return LocalDate.from(asOf);
     }
 
     const periodsToAdd = Math.floor(this.periodsToStartDate(asOf) + 1);
-    return this.anchorDate.add(periodsToAdd * period.number, period.unit);
+    return this.anchorDate.add(
+      periodsToAdd * this.period.number,
+      this.period.unit
+    );
   }
 
   getPreviousOccurrence(
@@ -106,14 +112,16 @@ export class RecurringDate {
     } = {}
   ): LocalDate {
     const { inclusive = false } = options;
-    const period = frequencyPeriodLength[this.frequency];
 
     if (inclusive && this.hasOccurrenceOn(asOf)) {
       return LocalDate.from(asOf);
     }
 
     const periodsToAdd = Math.ceil(this.periodsToStartDate(asOf) - 1);
-    return this.anchorDate.add(periodsToAdd * period.number, period.unit);
+    return this.anchorDate.add(
+      periodsToAdd * this.period.number,
+      this.period.unit
+    );
   }
 
   hasOccurrenceOn(date: LocalDate = LocalDate.today()): boolean {
@@ -121,8 +129,9 @@ export class RecurringDate {
   }
 
   private periodsToStartDate(date: LocalDate = LocalDate.today()): number {
-    const period = frequencyPeriodLength[this.frequency];
-    return date.diff(this.anchorDate, period.unit, true) / period.number;
+    return (
+      date.diff(this.anchorDate, this.period.unit, true) / this.period.number
+    );
   }
 
   /**
