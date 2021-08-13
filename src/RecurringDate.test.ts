@@ -76,14 +76,17 @@ describe("RecurringDate", () => {
       startDate       | frequency        | asOf            | expected | description
       ${"2019-01-27"} | ${"daily"}       | ${"2020-04-27"} | ${true}  | ${"monthly cycle"}
       ${"2020-07-27"} | ${"monthly"}     | ${"2020-04-27"} | ${true}  | ${"monthly cycle"}
-      ${"2020-07-31"} | ${"monthly"}     | ${"2020-04-30"} | ${true}  | ${"monthly cycle"}
+      ${"2020-01-31"} | ${"monthly"}     | ${"2020-04-30"} | ${true}  | ${"monthly cycle"}
+      ${"2020-01-31"} | ${"monthly"}     | ${"2020-02-29"} | ${true}  | ${"end of next month"}
+      ${"2020-02-29"} | ${"monthly"}     | ${"2020-01-30"} | ${false} | ${"not quite end of next month"}
+      ${"2020-04-30"} | ${"monthly"}     | ${"2020-01-31"} | ${false} | ${"not quite end of next month"}
       ${"2020-07-27"} | ${"monthly"}     | ${"2020-04-28"} | ${false} | ${"asOf at the start of a monthly cycle"}
       ${"2020-05-27"} | ${"annually"}    | ${"2020-05-27"} | ${true}  | ${"yearly cycle"}
       ${"2020-05-27"} | ${"annually"}    | ${"2021-09-27"} | ${false} | ${"asOf at the start of a yearly cycle"}
       ${"2020-06-02"} | ${"weekly"}      | ${"2020-11-03"} | ${true}  | ${"weekly cycle asOf Sunday"}
       ${"2020-06-02"} | ${"weekly"}      | ${"2020-11-06"} | ${false} | ${"weekly cycle asOf Monday end day Monday"}
-      ${"2020-07-15"} | ${"fortnightly"} | ${"2020-07-15"} | ${true}  | ${"fortnightly cycle with recent start date"}
-      ${"2020-07-10"} | ${"fortnightly"} | ${"2020-07-15"} | ${false} | ${"fortnightly cycle asOf start date"}
+      ${"2020-07-10"} | ${"fortnightly"} | ${"2020-07-10"} | ${true}  | ${"fortnightly cycle with recent start date"}
+      ${"2020-07-10"} | ${"fortnightly"} | ${"2020-07-01"} | ${false} | ${"fortnightly cycle asOf start date"}
     `("$description", ({ startDate, asOf, frequency, expected }) => {
       it(`should return ${expected}`, () => {
         expect(

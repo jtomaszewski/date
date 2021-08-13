@@ -125,7 +125,12 @@ export class RecurringDate {
   }
 
   hasOccurrenceOn(date: LocalDate = LocalDate.today()): boolean {
-    return Number.isInteger(this.periodsToStartDate(date));
+    const periodsBetween = Math.round(
+      date.diff(this.anchorDate, this.period.unit) / this.period.number
+    );
+    return this.anchorDate
+      .add(periodsBetween * this.period.number, this.period.unit)
+      .toEqual(date);
   }
 
   private periodsToStartDate(date: LocalDate = LocalDate.today()): number {
