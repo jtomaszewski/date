@@ -25,7 +25,7 @@ export interface RecurringDateInputWithStartDate {
 export interface MonthlyRecurringDateInput {
   frequency: "monthly";
   /**
-   * In range 1-28.
+   * In range 1-31.
    */
   anniversaryDay: number;
 }
@@ -33,7 +33,7 @@ export interface MonthlyRecurringDateInput {
 export interface AnnuallyRecurringDateInput {
   frequency: "annually";
   /**
-   * In range 1-28.
+   * In range 1-31.
    */
   anniversaryDay: number;
   /**
@@ -58,18 +58,13 @@ export function getValidAnchorDate(data: {
   const { frequency, startDate, anniversaryDay, anniversaryMonth } = data;
 
   if (startDate) {
-    const localStartDate = LocalDate.from(startDate);
-    if (
-      (frequency === "monthly" || frequency === "annually") &&
-      localStartDate.dayOfMonth > 28
-    ) {
-      throw new TypeError(`anniversaryDay must be less than or equal to 28`);
-    }
-    return localStartDate;
+    return LocalDate.from(startDate);
   }
 
+  const baseDate = new LocalDate("2020-01-01");
+
   if (frequency === "daily") {
-    return LocalDate.today();
+    return baseDate;
   }
 
   if (frequency === "fortnightly") {
@@ -79,39 +74,40 @@ export function getValidAnchorDate(data: {
   }
 
   if (!anniversaryDay) {
-    throw new TypeError(
-      "Anniversary day is required for all recurrences except fortnightly ones"
-    );
+    throw new TypeError("Start date nor anniversary day not provided");
   }
+
+  if (frequency === "weekly") {
+    if (anniversaryDay < 1 || anniversaryDay > 7) {
+      throw new TypeError(
+        `Weekly frequency must have anniversaryDay between [1,7]`
+      );
+    }
+    return baseDate.setDayOfWeek(anniversaryDay);
+  }
+
+  if (anniversaryDay < 1 || anniversaryDay > 31) {
+    throw new TypeError(`anniversaryDay must between [1,31]`);
+  }
+
+  if (frequency === "monthly") {
+    return baseDate.setDayOfMonth(anniversaryDay);
+  }
+
+  if (!anniversaryMonth || anniversaryMonth < 1 || anniversaryMonth > 12) {
+    throw new TypeError(`anniversaryMonth must be between [1,12]`);
+  }
+
+  const generatedStartDate = baseDate
+    .setMonth(anniversaryMonth - 1)
+    .setDayOfMonth(anniversaryDay);
 
   if (
-    frequency === "annually" &&
-    (!anniversaryMonth ||
-      anniversaryMonth > 12 ||
-      anniversaryMonth < 1 ||
-      anniversaryMonth % 1 !== 0)
+    generatedStartDate.month !== anniversaryMonth - 1 ||
+    generatedStartDate.dayOfMonth !== anniversaryDay
   ) {
-    throw new TypeError(
-      `Annual frequency must have integer anniversaryMonth in [1, 12]`
-    );
+    throw new TypeError(`must provide valid month/day combination`);
   }
-
-  if (frequency === "weekly" && anniversaryDay > 7) {
-    throw new TypeError(`Weekly frequency must have anniversaryDay <= 7`);
-  }
-
-  if (anniversaryDay > 28) {
-    throw new TypeError(`anniversaryDay must be less than or equal to 28`);
-  }
-
-  const generatedStartDate =
-    frequency === "weekly"
-      ? LocalDate.today().setDayOfWeek(anniversaryDay)
-      : frequency === "monthly"
-      ? LocalDate.today().setDayOfMonth(anniversaryDay)
-      : LocalDate.today()
-          .setDayOfMonth(anniversaryDay)
-          .setMonth(anniversaryMonth! - 1);
 
   return generatedStartDate;
 }

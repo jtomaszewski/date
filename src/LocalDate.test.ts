@@ -15,10 +15,19 @@ describe("LocalDate", () => {
       expect(LocalDate.from("2021-02-01").toString()).toEqual("2021-02-01");
       expect(LocalDate.from("2021-02-15").toString()).toEqual("2021-02-15");
       expect(LocalDate.from("2021-02-28").toString()).toEqual("2021-02-28");
+      expect(LocalDate.from("2020-02-29").toString()).toEqual("2020-02-29");
       expect(LocalDate.from("2021-03-01").toString()).toEqual("2021-03-01");
       expect(LocalDate.from("2021-03-15").toString()).toEqual("2021-03-15");
       expect(LocalDate.from("2021-03-31").toString()).toEqual("2021-03-31");
       expect(LocalDate.from("2021-04-01").toString()).toEqual("2021-04-01");
+    });
+
+    it("when constructed from an invalid date string, throws an error", () => {
+      expect(() =>
+        LocalDate.from("2021-02-30")
+      ).toThrowErrorMatchingInlineSnapshot(
+        `"Invalid LocalDate constructor value: 2021-02-30"`
+      );
     });
 
     it("when constructed from a timestamp string, returns its date", () => {
@@ -229,6 +238,56 @@ describe("LocalDate", () => {
       expect(b.diff(a, "week")).toEqual(52);
       expect(b.diff(a, "week", true)).toEqual(52.285_714_285_714_285);
     });
+  });
+
+  describe("add", () => {
+    it.each`
+      startDate       | period | frequency  | endDate
+      ${"2021-01-01"} | ${1}   | ${"day"}   | ${"2021-01-02"}
+      ${"2021-01-01"} | ${365} | ${"day"}   | ${"2022-01-01"}
+      ${"2020-01-01"} | ${366} | ${"day"}   | ${"2021-01-01"}
+      ${"2021-01-01"} | ${1}   | ${"week"}  | ${"2021-01-08"}
+      ${"2021-01-01"} | ${1}   | ${"month"} | ${"2021-02-01"}
+      ${"2021-01-01"} | ${12}  | ${"month"} | ${"2022-01-01"}
+      ${"2021-01-01"} | ${1}   | ${"year"}  | ${"2022-01-01"}
+      ${"2021-01-31"} | ${1}   | ${"day"}   | ${"2021-02-01"}
+      ${"2021-01-31"} | ${1}   | ${"week"}  | ${"2021-02-07"}
+      ${"2021-01-31"} | ${1}   | ${"month"} | ${"2021-02-28"}
+      ${"2020-01-31"} | ${1}   | ${"month"} | ${"2020-02-29"}
+      ${"2021-01-31"} | ${3}   | ${"month"} | ${"2021-04-30"}
+    `(
+      "should move $startDate by $period $frequency to $endDate",
+      ({ startDate, period, frequency, endDate }) => {
+        expect(
+          LocalDate.from(startDate).add(period, frequency).toString()
+        ).toEqual(endDate);
+      }
+    );
+  });
+
+  describe("subtract", () => {
+    it.each`
+      startDate       | period | frequency  | endDate
+      ${"2021-01-02"} | ${1}   | ${"day"}   | ${"2021-01-01"}
+      ${"2022-01-01"} | ${365} | ${"day"}   | ${"2021-01-01"}
+      ${"2021-01-01"} | ${366} | ${"day"}   | ${"2020-01-01"}
+      ${"2021-01-08"} | ${1}   | ${"week"}  | ${"2021-01-01"}
+      ${"2021-02-01"} | ${1}   | ${"month"} | ${"2021-01-01"}
+      ${"2022-01-01"} | ${12}  | ${"month"} | ${"2021-01-01"}
+      ${"2022-01-01"} | ${1}   | ${"year"}  | ${"2021-01-01"}
+      ${"2021-02-01"} | ${1}   | ${"day"}   | ${"2021-01-31"}
+      ${"2021-02-07"} | ${1}   | ${"week"}  | ${"2021-01-31"}
+      ${"2021-03-31"} | ${1}   | ${"month"} | ${"2021-02-28"}
+      ${"2020-03-31"} | ${1}   | ${"month"} | ${"2020-02-29"}
+      ${"2021-03-31"} | ${4}   | ${"month"} | ${"2020-11-30"}
+    `(
+      "should move $startDate by $period $frequency to $endDate",
+      ({ startDate, period, frequency, endDate }) => {
+        expect(
+          LocalDate.from(startDate).subtract(period, frequency).toString()
+        ).toEqual(endDate);
+      }
+    );
   });
 
   it("toDate() returns Date obj that has the same date", () => {

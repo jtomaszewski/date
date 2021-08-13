@@ -86,10 +86,12 @@ export class RecurringDate {
     const { inclusive = false } = options;
     const period = frequencyPeriodLength[this.frequency];
 
-    return this.getPreviousOccurrence(asOf, { inclusive: !inclusive }).add(
-      period.number,
-      period.unit
-    );
+    if (inclusive && this.hasOccurrenceOn(asOf)) {
+      return LocalDate.from(asOf);
+    }
+
+    const periodsToAdd = Math.floor(this.periodsToStartDate(asOf) + 1);
+    return this.anchorDate.add(periodsToAdd * period.number, period.unit);
   }
 
   getPreviousOccurrence(
@@ -106,11 +108,11 @@ export class RecurringDate {
     const { inclusive = false } = options;
     const period = frequencyPeriodLength[this.frequency];
 
-    if (!inclusive && this.hasOccurrenceOn(asOf)) {
-      return asOf.subtract(period.number, period.unit);
+    if (inclusive && this.hasOccurrenceOn(asOf)) {
+      return LocalDate.from(asOf);
     }
 
-    const periodsToAdd = Math.floor(this.periodsToStartDate(asOf));
+    const periodsToAdd = Math.ceil(this.periodsToStartDate(asOf) - 1);
     return this.anchorDate.add(periodsToAdd * period.number, period.unit);
   }
 
