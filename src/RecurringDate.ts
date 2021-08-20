@@ -143,13 +143,17 @@ export class RecurringDate {
   /**
    * Gets next occurrence from `asOf`,
    * that is no later than on `end` (if `end` is given).
+   *
+   * If `dateRange` has no start date, returns the next occurrence from today (inclusive).
    */
   getNextOccurrenceInDateRange(
     dateRange: DateRange,
     asOf: LocalDate = LocalDate.today()
   ): LocalDate | undefined {
     const occurrence = this.getNextOccurrence(
-      LocalDate.max(dateRange.start.subtract(1, "day"), asOf)
+      dateRange.start
+        ? LocalDate.max(dateRange.start.subtract(1, "day"), asOf)
+        : asOf
     );
     if (dateRange.end && occurrence.isAfter(dateRange.end)) {
       return undefined;
@@ -163,10 +167,25 @@ export class RecurringDate {
    *
    * If `dateRange` has no end date and `limit` is not given,
    * it will throw an error if the return value would exceed 100 elements.
+   *
+   * If `dateRange` has no start date, will return descending list from the end date.
+   *
+   * If `dateRange` has no start or end date, provides ascending list from today.
    */
   getOccurrencesInDateRange(dateRange: DateRange, limit?: number): LocalDate[] {
     const result = [];
-    let date = dateRange.start.subtract(1, "day");
+    let date: LocalDate;
+    let searchDirection: "ascending" | "descending" = "ascending";
+
+    if (dateRange.start) {
+      date = dateRange.start.subtract(1, "day");
+    } else if (dateRange.end) {
+      date = dateRange.end.add(1, "day");
+      searchDirection = "descending";
+    } else {
+      date = LocalDate.today();
+    }
+
     // eslint-disable-next-line no-constant-condition
     while (true) {
       if (limit !== undefined && result.length >= limit) {
@@ -177,10 +196,24 @@ export class RecurringDate {
           `getOccurrencesInDateRange() has been called with no \`limit\` while it would return more than 100 elements. Breaking...`
         );
       }
-      if (dateRange.end && date.isSameOrAfter(dateRange.end)) {
+      if (
+        searchDirection === "ascending" &&
+        dateRange.end &&
+        date.isSameOrAfter(dateRange.end)
+      ) {
         break;
       }
-      date = this.getNextOccurrence(date);
+      if (
+        searchDirection === "descending" &&
+        dateRange.start &&
+        date.isSameOrBefore(dateRange.start)
+      ) {
+        break;
+      }
+      date =
+        searchDirection === "ascending"
+          ? this.getNextOccurrence(date)
+          : this.getPreviousOccurrence(date);
       result.push(date);
     }
     return result;

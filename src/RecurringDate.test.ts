@@ -102,44 +102,77 @@ describe("RecurringDate", () => {
   describe("getNextOccurrenceInDateRange", () => {
     it("if next occurrence fits in the end date period, returns it", () => {
       const value1 = dailyRecurringDate.getNextOccurrenceInDateRange(
-        new DateRange(LocalDate.yesterday(), LocalDate.tomorrow())
+        new DateRange({
+          start: LocalDate.yesterday(),
+          end: LocalDate.tomorrow(),
+        })
       )!;
       expect(value1.toString()).toEqual(LocalDate.tomorrow().toString());
 
       const value2 = dailyRecurringDate.getNextOccurrenceInDateRange(
-        new DateRange(LocalDate.yesterday(), LocalDate.tomorrow().add(1, "day"))
+        new DateRange({
+          start: LocalDate.yesterday(),
+          end: LocalDate.tomorrow().add(1, "day"),
+        })
       )!;
       expect(value2.toString()).toEqual(LocalDate.tomorrow().toString());
     });
 
     it("if next occurrence doesnt fit in the end date period, returns undefined", () => {
       const value = dailyRecurringDate.getNextOccurrenceInDateRange(
-        new DateRange(LocalDate.yesterday(), LocalDate.today())
+        new DateRange({ start: LocalDate.yesterday(), end: LocalDate.today() })
       );
       expect(value).toEqual(undefined);
     });
 
     it("if end date is not given, returns next occurrence", () => {
       const value = dailyRecurringDate.getNextOccurrenceInDateRange(
-        new DateRange(LocalDate.yesterday())
+        new DateRange({ start: LocalDate.yesterday() })
+      )!;
+      expect(value.toString()).toEqual(LocalDate.tomorrow().toString());
+    });
+
+    it("if start date is not given, returns next occurrence from today", () => {
+      const value = dailyRecurringDate.getNextOccurrenceInDateRange(
+        new DateRange({})
       )!;
       expect(value.toString()).toEqual(LocalDate.tomorrow().toString());
     });
 
     it("if date range is in the future, returns first occurrence in it", () => {
       const value = dailyRecurringDate.getNextOccurrenceInDateRange(
-        new DateRange(LocalDate.tomorrow(), LocalDate.tomorrow().add(1, "day"))
+        new DateRange({
+          start: LocalDate.tomorrow(),
+          end: LocalDate.tomorrow().add(1, "day"),
+        })
       )!;
       expect(value.toString()).toEqual(LocalDate.tomorrow().toString());
     });
   });
 
   describe("getOccurrencesInDateRange", () => {
+    it("if called with infinite date range with no start date and a limit, returns descending occurrences up to the limit", () => {
+      expect(
+        dailyRecurringDate
+          .getOccurrencesInDateRange(
+            new DateRange({ end: LocalDate.from("2000-01-05") }),
+            5
+          )
+          .map((d) => d.toString())
+      ).toEqual([
+        "2000-01-05",
+        "2000-01-04",
+        "2000-01-03",
+        "2000-01-02",
+        "2000-01-01",
+      ]);
+    });
+
     it("if called with infinite date range and a limit, returns occurrences up to the limit", () => {
       expect(
         dailyRecurringDate
           .getOccurrencesInDateRange(
-            new DateRange(LocalDate.from("2000-01-01")),
+            new DateRange({ start: LocalDate.from("2000-01-01") }),
             5
           )
           .map((d) => d.toString())
@@ -156,10 +189,10 @@ describe("RecurringDate", () => {
       expect(
         dailyRecurringDate
           .getOccurrencesInDateRange(
-            new DateRange(
-              LocalDate.from("2000-01-01"),
-              LocalDate.from("2000-12-31")
-            ),
+            new DateRange({
+              start: LocalDate.from("2000-01-01"),
+              end: LocalDate.from("2000-12-31"),
+            }),
             5
           )
           .map((d) => d.toString())
@@ -176,10 +209,10 @@ describe("RecurringDate", () => {
       expect(
         dailyRecurringDate
           .getOccurrencesInDateRange(
-            new DateRange(
-              LocalDate.from("2000-01-01"),
-              LocalDate.from("2000-01-05")
-            )
+            new DateRange({
+              start: LocalDate.from("2000-01-01"),
+              end: LocalDate.from("2000-01-05"),
+            })
           )
           .map((d) => d.toString())
       ).toEqual([
@@ -191,10 +224,23 @@ describe("RecurringDate", () => {
       ]);
     });
 
+    it("if called with finite date range and no limit, throws an error if the return is over 100 elements", () => {
+      expect(() =>
+        dailyRecurringDate.getOccurrencesInDateRange(
+          new DateRange({
+            start: LocalDate.from("2000-01-01"),
+            end: LocalDate.from("2000-12-31"),
+          })
+        )
+      ).toThrowError(
+        `getOccurrencesInDateRange() has been called with no \`limit\` while it would return more than 100 elements. Breaking...`
+      );
+    });
+
     it("if called with infinite date range and no limit, throws an error", () => {
       expect(() =>
         dailyRecurringDate.getOccurrencesInDateRange(
-          new DateRange(LocalDate.from("2000-01-01"))
+          new DateRange({ start: LocalDate.from("2000-01-01") })
         )
       ).toThrowError(
         `getOccurrencesInDateRange() has been called with no \`limit\` while it would return more than 100 elements. Breaking...`
@@ -210,7 +256,7 @@ describe("RecurringDate", () => {
         expect(
           endOfMonthRecurringDate
             .getOccurrencesInDateRange(
-              new DateRange(LocalDate.from("2001-01-02")),
+              new DateRange({ start: LocalDate.from("2001-01-02") }),
               12
             )
             .map((d) => d.toString())
@@ -238,7 +284,7 @@ describe("RecurringDate", () => {
         expect(
           endOfMonthRecurringDate
             .getOccurrencesInDateRange(
-              new DateRange(LocalDate.from("2001-01-01")),
+              new DateRange({ start: LocalDate.from("2001-01-01") }),
               12
             )
             .map((d) => d.toString())
@@ -266,7 +312,7 @@ describe("RecurringDate", () => {
         expect(
           endOfMonthRecurringDate
             .getOccurrencesInDateRange(
-              new DateRange(LocalDate.from("2001-01-01")),
+              new DateRange({ start: LocalDate.from("2001-01-01") }),
               12
             )
             .map((d) => d.toString())
@@ -297,7 +343,7 @@ describe("RecurringDate", () => {
         expect(
           endOfMonthRecurringDate
             .getOccurrencesInDateRange(
-              new DateRange(LocalDate.from("2096-01-01")),
+              new DateRange({ start: LocalDate.from("2096-01-01") }),
               9
             )
             .map((d) => d.toString())
