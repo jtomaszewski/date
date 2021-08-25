@@ -361,4 +361,70 @@ describe("RecurringDate", () => {
       });
     });
   });
+
+  describe("format", () => {
+    const weeklyRecurringDate = new RecurringDate({
+      frequency: "weekly",
+      startDate: "2021-01-02",
+    });
+
+    const fortnightlyRecurringDate = new RecurringDate({
+      frequency: "fortnightly",
+      startDate: "2021-01-02",
+    });
+
+    const monthlyRecurringDate = new RecurringDate({
+      frequency: "monthly",
+      startDate: "2021-01-02",
+    });
+
+    const annuallyRecurringDate = new RecurringDate({
+      frequency: "annually",
+      startDate: "2021-01-02",
+    });
+
+    it("formats `X on Y` correctly", () => {
+      expect(dailyRecurringDate.format()).toEqual("Every day");
+      expect(weeklyRecurringDate.format()).toEqual("Saturday each week");
+      expect(fortnightlyRecurringDate.format()).toEqual(
+        "Fortnightly starting with 2 Jan 2021"
+      );
+      expect(monthlyRecurringDate.format()).toEqual("2nd of each month");
+      expect(annuallyRecurringDate.format()).toEqual("2nd January each year");
+    });
+
+    it("formats `/FF` correctly", () => {
+      expect(dailyRecurringDate.format({ type: "/FF" })).toEqual("/day");
+      expect(weeklyRecurringDate.format({ type: "/FF" })).toEqual("/wk");
+      expect(fortnightlyRecurringDate.format({ type: "/FF" })).toEqual("/fn");
+      expect(monthlyRecurringDate.format({ type: "/FF" })).toEqual("/mo");
+      expect(annuallyRecurringDate.format({ type: "/FF" })).toEqual("/yr");
+    });
+
+    it("formats `/FFFF` correctly", () => {
+      expect(dailyRecurringDate.format({ type: "/FFFF" })).toEqual("/day");
+      expect(weeklyRecurringDate.format({ type: "/FFFF" })).toEqual("/week");
+      expect(fortnightlyRecurringDate.format({ type: "/FFFF" })).toEqual(
+        "/fortnight"
+      );
+      expect(monthlyRecurringDate.format({ type: "/FFFF" })).toEqual("/month");
+      expect(annuallyRecurringDate.format({ type: "/FFFF" })).toEqual("/year");
+    });
+
+    it("formats `F-ly on D` correctly", () => {
+      expect(dailyRecurringDate.format({ type: "F-ly on D" })).toEqual("daily");
+      expect(weeklyRecurringDate.format({ type: "F-ly on D" })).toEqual(
+        "weekly on Saturday"
+      );
+      expect(fortnightlyRecurringDate.format({ type: "F-ly on D" })).toEqual(
+        "every 2nd Saturday"
+      );
+      expect(monthlyRecurringDate.format({ type: "F-ly on D" })).toEqual(
+        "monthly on the 2nd"
+      );
+      expect(annuallyRecurringDate.format({ type: "F-ly on D" })).toEqual(
+        "annually on the 2nd of January"
+      );
+    });
+  });
 });

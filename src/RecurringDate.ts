@@ -225,6 +225,7 @@ export class RecurringDate {
     /**
      * - X of Y
      *   - Every day
+     *   - Saturday each week
      *   - Fortnightly starting with 5 Jan 2021
      *   - 5th of each month
      *   - 5th January each year
@@ -240,10 +241,15 @@ export class RecurringDate {
      *   - /fortnight
      *   - /month
      *   - /year
-     *
+     * - "F-ly on D"
+     *   - daily
+     *   - weekly on Friday
+     *   - every 2nd Friday
+     *   - monthly on the 12th
+     *   - annually on the 12th of August
      *  @default "X of Y"
      */
-    type?: "X of Y" | "/FF" | "/FFFF";
+    type?: "X of Y" | "/FF" | "/FFFF" | "F-ly on D";
   } = {}): string {
     if (type === "X of Y") {
       // eslint-disable-next-line default-case
@@ -271,6 +277,38 @@ export class RecurringDate {
             .date(this.anchorDate.dayOfMonth)
             .month(this.anchorDate.month)
             .format("Do MMMM")} each year`;
+      }
+    }
+
+    if (type === "F-ly on D") {
+      // eslint-disable-next-line default-case
+      switch (this.frequency) {
+        case "daily":
+          return "daily";
+
+        case "weekly":
+          return `weekly on ${moment()
+            .isoWeekday(this.anchorDate.dayOfWeek)
+            .format("dddd")}`;
+
+        case "fortnightly":
+          return `every 2nd ${moment()
+            .isoWeekday(this.anchorDate.dayOfWeek)
+            .format("dddd")}`;
+
+        case "monthly":
+          return `monthly on the ${moment()
+            .date(this.anchorDate.dayOfMonth)
+            .format("Do")}`;
+
+        case "annually": {
+          const date = moment()
+            .date(this.anchorDate.dayOfMonth)
+            .month(this.anchorDate.month);
+          return `annually on the ${date.format("Do")} of ${date.format(
+            "MMMM"
+          )}`;
+        }
       }
     }
 
