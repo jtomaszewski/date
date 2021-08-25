@@ -287,27 +287,25 @@ export class RecurringDate {
           return "daily";
 
         case "weekly":
-          return `weekly on ${moment()
+          return moment()
             .isoWeekday(this.anchorDate.dayOfWeek)
-            .format("dddd")}`;
+            .format("[weekly on] dddd");
 
         case "fortnightly":
-          return `every 2nd ${moment()
+          return moment()
             .isoWeekday(this.anchorDate.dayOfWeek)
-            .format("dddd")}`;
+            .format("[every 2nd] dddd");
 
         case "monthly":
-          return `monthly on the ${moment()
+          return moment()
             .date(this.anchorDate.dayOfMonth)
-            .format("Do")}`;
+            .format("[monthly on the] Do");
 
         case "annually": {
-          const date = moment()
+          return moment()
             .date(this.anchorDate.dayOfMonth)
-            .month(this.anchorDate.month);
-          return `annually on the ${date.format("Do")} of ${date.format(
-            "MMMM"
-          )}`;
+            .month(this.anchorDate.month)
+            .format("[annually on the] Do [of] MMMM");
         }
       }
     }
