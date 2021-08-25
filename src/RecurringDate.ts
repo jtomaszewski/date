@@ -221,7 +221,30 @@ export class RecurringDate {
 
   format({
     type = "X of Y",
-  }: { type?: "X of Y" | "/FF" | "/FFFF" } = {}): string {
+  }: {
+    /**
+     * - X of Y
+     *   - Every day
+     *   - Fortnightly starting with 5 Jan 2021
+     *   - 5th of each month
+     *   - 5th January each year
+     * - /FF
+     *   - /day
+     *   - /wk
+     *   - /fn
+     *   - /mo
+     *   - /yr
+     * - /FFFF
+     *   - /day
+     *   - /week
+     *   - /fortnight
+     *   - /month
+     *   - /year
+     *
+     *  @default "X of Y"
+     */
+    type?: "X of Y" | "/FF" | "/FFFF";
+  } = {}): string {
     if (type === "X of Y") {
       // eslint-disable-next-line default-case
       switch (this.frequency) {
