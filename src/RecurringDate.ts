@@ -221,7 +221,36 @@ export class RecurringDate {
 
   format({
     type = "X of Y",
-  }: { type?: "X of Y" | "/FF" | "/FFFF" } = {}): string {
+  }: {
+    /**
+     * - X of Y
+     *   - Every day
+     *   - Saturday each week
+     *   - Fortnightly starting with 5 Jan 2021
+     *   - 5th of each month
+     *   - 5th January each year
+     * - /FF
+     *   - /day
+     *   - /wk
+     *   - /fn
+     *   - /mo
+     *   - /yr
+     * - /FFFF
+     *   - /day
+     *   - /week
+     *   - /fortnight
+     *   - /month
+     *   - /year
+     * - "F-ly on D"
+     *   - daily
+     *   - weekly on Friday
+     *   - every 2nd Friday
+     *   - monthly on the 12th
+     *   - annually on the 12th of August
+     *  @default "X of Y"
+     */
+    type?: "X of Y" | "/FF" | "/FFFF" | "F-ly on D";
+  } = {}): string {
     if (type === "X of Y") {
       // eslint-disable-next-line default-case
       switch (this.frequency) {
@@ -248,6 +277,36 @@ export class RecurringDate {
             .date(this.anchorDate.dayOfMonth)
             .month(this.anchorDate.month)
             .format("Do MMMM")} each year`;
+      }
+    }
+
+    if (type === "F-ly on D") {
+      // eslint-disable-next-line default-case
+      switch (this.frequency) {
+        case "daily":
+          return "daily";
+
+        case "weekly":
+          return moment()
+            .isoWeekday(this.anchorDate.dayOfWeek)
+            .format("[weekly on] dddd");
+
+        case "fortnightly":
+          return moment()
+            .isoWeekday(this.anchorDate.dayOfWeek)
+            .format("[every 2nd] dddd");
+
+        case "monthly":
+          return moment()
+            .date(this.anchorDate.dayOfMonth)
+            .format("[monthly on the] Do");
+
+        case "annually": {
+          return moment()
+            .date(this.anchorDate.dayOfMonth)
+            .month(this.anchorDate.month)
+            .format("[annually on the] Do [of] MMMM");
+        }
       }
     }
 
