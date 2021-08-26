@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.1.0](https://github.com/ailohq/date/compare/v3.0.1...v3.1.0) (2021-08-26)
+
+
+### Features
+
+* Add new date format for LocalDate ([d0563c6](https://github.com/ailohq/date/commit/d0563c61a6923e3fec61d53d028ec8212ff4b8ff))
+* Add new date format for RecurringDate ([8989ab3](https://github.com/ailohq/date/commit/8989ab391dc53311afe3977db227b41cb73cdb33))
+
 ### [3.0.1](https://github.com/ailohq/date/compare/v2.12.1...v3.0.1) (2021-08-20)
 
 ### [2.12.1](https://github.com/ailohq/date/compare/v2.12.0...v2.12.1) (2021-08-15)
