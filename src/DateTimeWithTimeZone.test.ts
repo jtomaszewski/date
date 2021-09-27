@@ -71,6 +71,7 @@ describe("format", () => {
     const now = DateTimeWithTimeZone.now();
     expect(now.format("DD MMM YYYY h:mm A")).toEqual("27 Sep 2020 10:21 PM");
     expect(now.format("DD/MM/YYYY, HH:mm:ss")).toEqual("27/09/2020, 22:21:23");
+    expect(now.format("h:mma D MMM YYYY")).toEqual("10:21pm 27 Sep 2020");
   });
 });
 
