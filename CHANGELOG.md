@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.2.0](https://github.com/ailohq/date/compare/v3.1.0...v3.2.0) (2021-09-27)
+
+
+### Features
+
+* **DateTimeWithTimeZone:** Add `h:mma D MMM YYYY` format ([623798e](https://github.com/ailohq/date/commit/623798e5217cc118bd7bcddb0ebb2c3c2704611b))
+
 ## [3.1.0](https://github.com/ailohq/date/compare/v3.0.1...v3.1.0) (2021-08-26)
 
 
