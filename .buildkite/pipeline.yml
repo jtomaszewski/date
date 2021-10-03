@@ -1,0 +1,45 @@
+permit_retry_on_passed: &permit_retry_on_passed
+  retry:
+    manual:
+      permit_on_passed: true
+cache_opts: &cache_opts
+  backend: s3
+  s3:
+    bucket: ailo-buildkite-cache
+if_master_or_hotfix: &if_master_or_hotfix
+  if: build.branch == "master" || build.branch =~ /^hotfix/
+if_hotfix: &if_hotfix
+  if: build.branch =~ /^hotfix/
+if_not_master: &if_not_master
+  if: build.branch != "master"
+
+steps:
+  - label: Test
+    <<: *permit_retry_on_passed
+    plugins:
+      - gencer/cache#v2.3.10:
+          <<: *cache_opts
+          key: "deps-{{ checksum 'yarn.lock' }}"
+          paths:
+            - ./.yarn-cache
+            - ./node_modules
+      - docker-compose#v3.7.0:
+          run: build-test
+          env:
+            - YARN_CACHE_FOLDER=./.yarn-cache
+  - wait
+
+  - label: ":yarn: Publish"
+    <<: *permit_retry_on_passed
+    <<: *if_master_or_hotfix
+    plugins:
+      - gencer/cache#v2.3.10:
+          <<: *cache_opts
+          key: "deps-{{ checksum 'yarn.lock' }}"
+          paths:
+            - ./.yarn-cache
+            - ./node_modules
+      - docker-compose#v3.7.0:
+          run: build-publish
+          env:
+            - YARN_CACHE_FOLDER=./.yarn-cache

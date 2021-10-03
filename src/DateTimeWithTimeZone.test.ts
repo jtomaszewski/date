@@ -64,7 +64,7 @@ describe("now", () => {
 
 describe("format", () => {
   beforeEach(() => {
-    MockDate.set("2020-09-27T22:21:23");
+    MockDate.set("2020-09-27T22:21:23+10:00");
   });
 
   it("formats correctly all supported datetime formats", () => {
