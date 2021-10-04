@@ -33,7 +33,9 @@ export type LocalDateFormat =
   | "MMM"
   | "YYYY-MM-DD"
   | "Do [of] MMMM YYYY"
-  | "MMMM D, YYYY";
+  | "MMMM D, YYYY"
+  | "YY"
+  | "YYYY";
 
 interface FormatOptions {
   type: LocalDateFormat;

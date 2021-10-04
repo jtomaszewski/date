@@ -1,11 +1,16 @@
 import MockDate from "mockdate";
 import moment from "moment-timezone";
-import { LocalDate } from "./LocalDate";
+import { LocalDate, LocalDateFormat } from "./LocalDate";
 
 MockDate.set("2020-09-27T10:00:00");
 
 const a = new LocalDate("2020-01-01");
 const b = new LocalDate("2021-01-01");
+
+// Checks that the passed array's type covers every format of LocalDateFormat (and returns the array)
+const checkArrayContainsAllFormats = <T extends LocalDateFormat[]>(
+  formats: T & ([LocalDateFormat] extends [T[number]] ? unknown : never)
+): T => formats;
 
 describe("LocalDate", () => {
   describe("from", () => {
@@ -77,6 +82,38 @@ describe("LocalDate", () => {
     it("if receives no args, formats using value format", () => {
       expect(a.format()).toEqual("2020-01-01");
     });
+
+    const date = LocalDate.fromString("2021-10-03");
+    const formatsAndExpectations = [
+      ["D MMM YY", "3 Oct 21"],
+      ["D MMM YYYY", "3 Oct 2021"],
+      ["D MMM", "3 Oct"],
+      ["D MMMM YYYY", "3 October 2021"],
+      ["D MMMM", "3 October"],
+      ["D", "3"],
+      ["DD MMM YY", "03 Oct 21"],
+      ["DD MMM YYYY", "03 Oct 2021"],
+      ["DD MMM", "03 Oct"],
+      ["DD MMMM YYYY", "03 October 2021"],
+      ["DD MMMM", "03 October"],
+      ["DD/MM/YYYY", "03/10/2021"],
+      ["MMM", "Oct"],
+      ["YYYY-MM-DD", "2021-10-03"],
+      ["Do [of] MMMM YYYY", "3rd of October 2021"],
+      ["MMMM D, YYYY", "October 3, 2021"],
+      ["YY", "21"],
+      ["YYYY", "2021"],
+    ] as const;
+
+    // There will be an error here if formatsAndExceptions does not contain an entry for every type in the union LocalDateFormat
+    checkArrayContainsAllFormats(formatsAndExpectations.map((test) => test[0]));
+
+    it.each(formatsAndExpectations)(
+      "when passed the format '%s', should output '%s'",
+      (format, expected) => {
+        expect(date.format(format)).toEqual(expected);
+      }
+    );
 
     it("format type can be customized", () => {
       expect(a.format("DD MMM YYYY")).toEqual("01 Jan 2020");
