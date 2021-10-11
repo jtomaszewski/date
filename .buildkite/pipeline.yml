@@ -1,0 +1,58 @@
+permit_retry_on_passed: &permit_retry_on_passed
+  retry:
+    manual:
+      permit_on_passed: true
+
+cache_opts: &cache_opts
+  backend: s3
+  s3:
+    bucket: ailo-buildkite-cache
+
+docker_node_plugin_opts: &docker_node_plugin_opts
+  image: node:16
+  propagate-environment: true
+  volumes:
+    - ./:/app
+    - $YARN_CACHE_FOLDER:$YARN_CACHE_FOLDER
+
+yarn_cache_plugin: &yarn_cache_plugin
+  gencer/cache#v2.3.10:
+    <<: *cache_opts
+    key: "deps-{{ checksum 'yarn.lock' }}"
+    paths:
+      - "$YARN_CACHE_FOLDER"
+      - ./node_modules
+
+if_master_or_hotfix: &if_master_or_hotfix
+  if: build.branch == "master" || build.branch =~ /^hotfix/
+if_hotfix: &if_hotfix
+  if: build.branch =~ /^hotfix/
+if_not_master: &if_not_master
+  if: build.branch != "master"
+
+env:
+  YARN_CACHE_FOLDER: "$BUILDKITE_BUILD_PATH/yarn_home/.cache"
+
+steps:
+  - label: Test
+    <<: *permit_retry_on_passed
+    command: .buildkite/test.sh
+    plugins:
+      - *yarn_cache_plugin
+      - docker#v3.8.0:
+          <<: *docker_node_plugin_opts
+          environment:
+            - NPM_TOKEN
+  - wait
+
+  - label: ":yarn: Publish"
+    <<: *permit_retry_on_passed
+    <<: *if_master_or_hotfix
+    command: .buildkite/publish.sh
+    plugins:
+      - *yarn_cache_plugin
+      - docker#v3.8.0:
+          <<: *docker_node_plugin_opts
+          environment:
+            - NPM_TOKEN
+            - GITHUB_TOKEN
