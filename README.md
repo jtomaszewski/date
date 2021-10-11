@@ -26,8 +26,4 @@ yarn validate # run linters, tests and build
 
 ## Releasing
 
-**Note: Releasing is done manually. This project has no CI/CD configuration.**
-
-```sh
-yarn release # will automatically ask you about version bump, run tests and build, and push new version to git & npm
-```
+Push changes to master. Buildkite will automatically bump the version using [standard-version](https://github.com/conventional-changelog/standard-version) and publish it to npm.
