@@ -20,7 +20,7 @@
     "lint:prettier": "prettier \"src/**/*.ts\" --list-different",
     "lint:eslint": "eslint .",
     "lint:typescript": "tsc",
-    "test": "jest --passWithNoTests",
+    "test": "jest --passWithNoTests --colors",
     "test:watch": "jest --passWithNoTests --watch",
     "start": "run-s clean build:main && run-p \"build:main -- -w\" \"test:watch\"",
     "version-bump": "standard-version",

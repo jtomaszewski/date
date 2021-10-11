@@ -9,7 +9,7 @@ git config --global user.email "${GITHUB_USER_EMAIL:-ailo-release-bot@ailo.io}"
 git config --global user.name "${GITHUB_USER_NAME:-ailo-release-bot}"
 
 echo "--- yarn install"
-yarn install
+yarn install --frozen-lockfile
 
 echo "--- yarn build"
 yarn build
