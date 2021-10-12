@@ -18,7 +18,7 @@ echo "--- yarn version-bump"
 yarn version-bump
 
 echo "--- git push"
-git push https://${GITHUB_TOKEN}@github.com/${REPO_ORG}/${REPO_NAME}.git --follow-tags origin HEAD:master --no-verify
+git push https://${GITHUB_TOKEN}@github.com/${REPO_ORG}/${REPO_NAME}.git --follow-tags HEAD:master --no-verify
 
 echo "--- yarn publish"
 yarn publish --non-interactive
