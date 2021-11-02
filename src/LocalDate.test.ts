@@ -397,6 +397,13 @@ describe("LocalDate", () => {
       expect(isMoment(date.startOfNextDay("Australia/Sydney"))).toBeTruthy();
     });
 
+    it("should not mutate the local date", () => {
+      const dateString = "2021-10-01";
+      const date = LocalDate.fromString(dateString);
+      date.startOfDay("Australia/Sydney");
+      expect(date.toString()).toEqual(dateString);
+    });
+
     describe("in the Sydney timezone", () => {
       it("should be the start of the next day during daylight savings", () => {
         const date = LocalDate.fromString("2021-11-02");
