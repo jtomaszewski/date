@@ -1,5 +1,5 @@
 import MockDate from "mockdate";
-import moment from "moment-timezone";
+import moment, { isMoment } from "moment-timezone";
 import { LocalDate, LocalDateFormat } from "./LocalDate";
 
 MockDate.set("2020-09-27T10:00:00");
@@ -355,5 +355,73 @@ describe("LocalDate", () => {
     expect(LocalDate.from("2021-04-01").toDate().toString()).toMatch(
       "Apr 01 2021"
     );
+  });
+
+  describe("startOfDay", () => {
+    it("should return a moment", () => {
+      const date = LocalDate.fromString("2021-10-01");
+      expect(isMoment(date.startOfDay("Australia/Sydney"))).toBeTruthy();
+    });
+
+    describe("in the Sydney timezone", () => {
+      it("should be the start of the day during daylight savings", () => {
+        const date = LocalDate.fromString("2021-11-02");
+        const datetime = date.startOfDay("Australia/Sydney");
+        expect(datetime.toISOString()).toEqual("2021-11-01T13:00:00.000Z");
+      });
+
+      it("should be the start of the day not during daylight savings", () => {
+        const date = LocalDate.fromString("2021-06-02");
+        const datetime = date.startOfDay("Australia/Sydney");
+        expect(datetime.toISOString()).toEqual("2021-06-01T14:00:00.000Z");
+      });
+    });
+
+    it("should handle various timezones", () => {
+      const date = LocalDate.fromString("2021-11-02");
+
+      const datetime1 = date.startOfDay("America/Los_Angeles");
+      expect(datetime1.toISOString()).toEqual("2021-11-02T07:00:00.000Z");
+
+      const datetime2 = date.startOfDay("Europe/Rome");
+      expect(datetime2.toISOString()).toEqual("2021-11-01T23:00:00.000Z");
+
+      const datetime3 = date.startOfDay("Pacific/Auckland");
+      expect(datetime3.toISOString()).toEqual("2021-11-01T11:00:00.000Z");
+    });
+  });
+
+  describe("startOfNextDay", () => {
+    it("should return a moment", () => {
+      const date = LocalDate.fromString("2021-10-01");
+      expect(isMoment(date.startOfNextDay("Australia/Sydney"))).toBeTruthy();
+    });
+
+    describe("in the Sydney timezone", () => {
+      it("should be the start of the next day during daylight savings", () => {
+        const date = LocalDate.fromString("2021-11-02");
+        const datetime = date.startOfNextDay("Australia/Sydney");
+        expect(datetime.toISOString()).toEqual("2021-11-02T13:00:00.000Z");
+      });
+
+      it("should be the start of the next day not during daylight savings", () => {
+        const date = LocalDate.fromString("2021-06-02");
+        const datetime = date.startOfNextDay("Australia/Sydney");
+        expect(datetime.toISOString()).toEqual("2021-06-02T14:00:00.000Z");
+      });
+    });
+
+    it("should handle various timezones", () => {
+      const date = LocalDate.fromString("2021-11-02");
+
+      const datetime1 = date.startOfNextDay("America/Los_Angeles");
+      expect(datetime1.toISOString()).toEqual("2021-11-03T07:00:00.000Z");
+
+      const datetime2 = date.startOfNextDay("Europe/Rome");
+      expect(datetime2.toISOString()).toEqual("2021-11-02T23:00:00.000Z");
+
+      const datetime3 = date.startOfNextDay("Pacific/Auckland");
+      expect(datetime3.toISOString()).toEqual("2021-11-02T11:00:00.000Z");
+    });
   });
 });
