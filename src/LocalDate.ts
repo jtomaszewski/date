@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/prefer-regexp-exec */
-import moment from "moment-timezone";
+import moment, { Moment } from "moment-timezone";
 import { DateTimeWithTimeZone } from "./DateTimeWithTimeZone";
 import { DefaultTimeZoneRef } from "./DefaultTimeZoneRef";
 
@@ -345,6 +345,14 @@ export class LocalDate {
       this.moment.date()
     );
     return date;
+  }
+
+  startOfDay(zoneId: string): Moment {
+    return moment.tz(this.toString(), zoneId);
+  }
+
+  startOfNextDay(zoneId: string): Moment {
+    return moment.tz(this.add(1, "day").toString(), zoneId);
   }
 
   toEqual(other: unknown): boolean {
