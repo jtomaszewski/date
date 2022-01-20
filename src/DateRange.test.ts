@@ -157,7 +157,7 @@ describe("DateRange", () => {
   describe(".format", () => {
     it("if end date is specified, returns formatted date range", () => {
       expect(new DateRange({ start: a, end: b }).format()).toEqual(
-        "2000-01-01 – 2000-01-31"
+        "2000-01-01 — 2000-01-31"
       );
     });
 
